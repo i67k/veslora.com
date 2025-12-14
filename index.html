@@ -33,6 +33,27 @@
         linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.30) 100%),
         url("assets/hero.jpg") center/cover no-repeat;
     }
+.site-logo{
+  position:absolute;
+  top:20px;
+  left:20px;
+  z-index:5;
+}
+
+.site-logo img{
+  height:28px;
+  width:auto;
+}
+
+@media (max-width:600px){
+  .site-logo{
+    top:16px;
+    left:16px;
+  }
+  .site-logo img{
+    height:24px;
+  }
+}
 
     .hero::after{
       content:"";
@@ -228,6 +249,9 @@
 </head>
 
 <body>
+  <div class="site-logo">
+  <img src="assets/veslora-logo.svg" alt="Veslora logo">
+</div>
   <section class="hero">
     <div class="content">
       <h1 class="brand">VESLORA</h1>
