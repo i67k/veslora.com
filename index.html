@@ -2,189 +2,252 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Veslora – Coming Soon</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="c:\Users\thasleema\Downloads\spray-1514264_1920.jpg" />
+  <title>Veslora</title>
+
+  <meta name="description" content="Veslora is a contemporary luxury brand. Timeless, minimal, intentional.">
+  <link rel="canonical" href="https://veslora.com/" />
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      height: 100vh;
-      background: #0a0a0a;
-      color: #fff;
-      font-family: 'Cormorant Garamond', serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 20px;
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      background:#0f0f10;
+      color:#f2f2f2;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+      overflow-x:hidden;
     }
 
-    .container {
-      max-width: 600px;
-      width: 100%;
-      animation: fadeIn 1.5s ease-out forwards;
+    /* HERO */
+    .hero{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      position:relative;
+      padding:24px;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.30) 100%),
+        url("assets/hero.jpg") center/cover no-repeat;
     }
 
-    h1 {
-      font-size: 3.8em;
-      color: #d4af37;
-      margin-bottom: 20px;
-      white-space: nowrap;
-      overflow: hidden;
-      border-right: 2px solid #d4af37;
-      width: 0;
-      animation: typing 3.5s steps(30, end) forwards, blink .7s step-end infinite;
+    /* subtle film grain look (optional, elegant) */
+    .hero::after{
+      content:"";
+      position:absolute; inset:0;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.06), transparent 55%);
+      pointer-events:none;
+      mix-blend-mode:soft-light;
+      opacity:0.7;
     }
 
-    p {
-      font-size: 1.4em;
-      color: #ccc;
-      margin-top: 30px;
-      opacity: 0;
-      animation: fadeIn 2s ease-out 3.5s forwards;
+    .content{
+      width:min(920px,100%);
+      position:relative;
+      display:grid;
+      gap:22px;
+      padding: 10px;
     }
 
-    .btn {
-      margin-top: 40px;
-      padding: 12px 28px;
-      font-size: 1.1em;
-      font-family: sans-serif;
-      background: #d4af37;
-      color: #000;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      font-weight: bold;
-      opacity: 0;
-      animation: fadeIn 2s ease-out 5s forwards;
-      transition: background 0.3s;
+    .brand{
+      font-family:"Cormorant Garamond", serif;
+      font-weight:700;
+      letter-spacing:0.22em;
+      text-transform:uppercase;
+      font-size:clamp(3.0rem, 6vw, 5.3rem);
+      line-height:1.05;
+
+      /* typing effect like cursor */
+      white-space:nowrap;
+      overflow:hidden;
+      border-right:2px solid rgba(242,242,242,0.85);
+      width:0;
+      animation: typing 2.4s steps(18,end) 200ms forwards, blink 700ms step-end infinite;
     }
 
-    .btn:hover {
-      background: #e0c15c;
+    .tagline{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size:clamp(1.05rem, 1.6vw, 1.25rem);
+      color:rgba(242,242,242,0.78);
+      max-width: 44ch;
+      opacity:0;
+      transform: translateY(8px);
+      animation: fadeUp 900ms ease-out 2.6s forwards;
     }
 
-    footer {
-      margin-top: 40px;
-      font-size: 0.9em;
-      color: #666;
-      opacity: 0;
-      animation: fadeIn 2s ease-out 5.5s forwards;
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      align-items:center;
+      opacity:0;
+      transform: translateY(8px);
+      animation: fadeUp 900ms ease-out 3.0s forwards;
     }
 
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+    .btn{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight:600;
+      font-size:0.98rem;
+      padding:12px 18px;
+      border-radius:999px;
+      cursor:pointer;
+      border:1px solid rgba(242,242,242,0.22);
+      background: rgba(0,0,0,0.25);
+      color:#f2f2f2;
+      transition: transform .15s ease, background .2s ease, border-color .2s ease;
+      backdrop-filter: blur(6px);
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      background: rgba(242,242,242,0.12);
+      border-color: rgba(242,242,242,0.35);
     }
 
-    @keyframes blink {
-      50% { border-color: transparent; }
+    .btn-primary{
+      background: rgba(242,242,242,0.92);
+      color:#0f0f10;
+      border-color: rgba(242,242,242,0.9);
+    }
+    .btn-primary:hover{
+      background: #ffffff;
+      border-color: #ffffff;
     }
 
-    @keyframes fadeIn {
-      to { opacity: 1; }
+    .footer{
+      position: absolute;
+      left: 24px;
+      bottom: 18px;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-size:0.9rem;
+      color: rgba(242,242,242,0.45);
     }
 
     /* Modal */
-    .modal {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.85);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      visibility: hidden;
-      opacity: 0;
-      transition: all 0.3s ease-out;
-      z-index: 10;
+    .modal{
+      position:fixed; inset:0;
+      background: rgba(0,0,0,0.75);
+      display:grid; place-items:center;
+      padding:20px;
+      visibility:hidden; opacity:0;
+      transition: opacity .2s ease, visibility .2s ease;
+      z-index:10;
+    }
+    .modal.show{ visibility:visible; opacity:1; }
+
+    .modal-box{
+      width:min(520px, 100%);
+      background: rgba(15,15,16,0.92);
+      border:1px solid rgba(242,242,242,0.14);
+      border-radius:18px;
+      padding:22px 18px;
+      backdrop-filter: blur(10px);
     }
 
-    .modal.show {
-      visibility: visible;
-      opacity: 1;
+    .email{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-weight:600;
+      font-size:1.02rem;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(242,242,242,0.14);
+      background: rgba(242,242,242,0.06);
+      color:#f2f2f2;
+      word-break: break-word;
+      margin: 12px 0 14px;
     }
 
-    .modal-content {
-      background: #1a1a1a;
-      padding: 30px 40px;
-      border-radius: 10px;
-      text-align: center;
-      color: #fff;
-      max-width: 400px;
-      width: 90%;
-      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    .modal-actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
-    .modal-content p {
-      margin-bottom: 20px;
+    @keyframes typing { from { width:0 } to { width:100% } }
+    @keyframes blink { 50% { border-color:transparent; } }
+    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
+
+    @media (max-width:600px){
+      .hero{
+        background:
+          linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.35) 100%),
+          url("assets/hero.jpg") center/cover no-repeat;
+      }
+      .modal-actions{ justify-content:stretch; }
+      .modal-actions .btn{ width:100%; }
+      .actions .btn{ width:100%; }
     }
 
-    .copy-btn, .close-btn {
-      padding: 10px 20px;
-      margin: 5px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-
-    .copy-btn {
-      background: #fff;
-      color: #000;
-    }
-
-    .close-btn {
-      background: transparent;
-      color: #aaa;
-      font-size: 0.9em;
-    }
-
-    @media (max-width: 500px) {
-      h1 { font-size: 2.4em; }
-      p  { font-size: 1.1em; }
-      .btn { font-size: 1em; }
+    @media (prefers-reduced-motion: reduce){
+      *{animation:none!important;transition:none!important;}
+      .brand{width:auto;border-right:none;}
+      .tagline,.actions{opacity:1;transform:none;}
     }
   </style>
 </head>
-<body>
-  <div class="container">
-    <h1>VESLORA</h1>
-    <p>Timeless elegance in progress.</p>
-    <button class="btn" onclick="openModal()">Contact us</button>
-    <footer>&copy; 2025 Veslora. All rights reserved.</footer>
-  </div>
 
-  <div class="modal" id="emailModal">
-    <div class="modal-content">
-      <p>Email: <strong id="emailText">info@veslora.com</strong></p>
-      <button class="copy-btn" onclick="copyEmail()">Copy</button>
-      <button class="close-btn" onclick="closeModal()">Close</button>
+<body>
+  <section class="hero">
+    <div class="content">
+      <h1 class="brand">VESLORA</h1>
+      <p class="tagline">Minimal. Editorial. Intentional. A quiet luxury brand in progress.</p>
+
+      <div class="actions">
+        <button class="btn btn-primary" onclick="openModal()">Contact</button>
+        <button class="btn" onclick="copyEmail()">Copy email</button>
+      </div>
+    </div>
+
+    <div class="footer">&copy; 2025 Veslora</div>
+  </section>
+
+  <div class="modal" id="emailModal" role="dialog" aria-modal="true">
+    <div class="modal-box">
+      <div class="email" id="emailText">info@veslora.com</div>
+      <div class="modal-actions">
+        <button class="btn" onclick="openMail()">Open mail</button>
+        <button class="btn btn-primary" onclick="copyEmail()">Copy</button>
+        <button class="btn" onclick="closeModal()">Close</button>
+      </div>
     </div>
   </div>
 
   <script>
     const modal = document.getElementById('emailModal');
-    function openModal() {
-      modal.classList.add('show');
+    const emailEl = document.getElementById('emailText');
+
+    function openModal(){ modal.classList.add('show'); }
+    function closeModal(){ modal.classList.remove('show'); }
+
+    function openMail(){
+      const email = emailEl.textContent.trim();
+      window.location.href = "mailto:" + encodeURIComponent(email);
     }
-    function closeModal() {
-      modal.classList.remove('show');
+
+    async function copyEmail(){
+      const txt = emailEl.textContent.trim();
+      try{
+        if (navigator.clipboard && window.isSecureContext){
+          await navigator.clipboard.writeText(txt);
+        } else {
+          const temp = document.createElement('textarea');
+          temp.value = txt;
+          temp.style.position = 'fixed';
+          temp.style.left = '-9999px';
+          document.body.appendChild(temp);
+          temp.select();
+          document.execCommand('copy');
+          document.body.removeChild(temp);
+        }
+      } catch(e) {}
     }
-    function copyEmail() {
-      const txt = document.getElementById('emailText').innerText;
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(txt).then(() => alert('Copied: ' + txt));
-      } else {
-        const temp = document.createElement('input');
-        temp.value = txt;
-        document.body.appendChild(temp);
-        temp.select();
-        document.execCommand("copy");
-        document.body.removeChild(temp);
-        alert('Copied: ' + txt);
-      }
-    }
+
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
   </script>
 </body>
 </html>
