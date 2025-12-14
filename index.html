@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Veslora – Coming Soon</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      height: 100vh;
+      background: #0a0a0a;
+      color: #fff;
+      font-family: 'Cormorant Garamond', serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      width: 100%;
+      animation: fadeIn 1.5s ease-out forwards;
+    }
+
+    h1 {
+      font-size: 3.8em;
+      color: #d4af37;
+      margin-bottom: 20px;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 2px solid #d4af37;
+      width: 0;
+      animation: typing 3.5s steps(30, end) forwards, blink .7s step-end infinite;
+    }
+
+    p {
+      font-size: 1.4em;
+      color: #ccc;
+      margin-top: 30px;
+      opacity: 0;
+      animation: fadeIn 2s ease-out 3.5s forwards;
+    }
+
+    .btn {
+      margin-top: 40px;
+      padding: 12px 28px;
+      font-size: 1.1em;
+      font-family: sans-serif;
+      background: #d4af37;
+      color: #000;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: bold;
+      opacity: 0;
+      animation: fadeIn 2s ease-out 5s forwards;
+      transition: background 0.3s;
+    }
+
+    .btn:hover {
+      background: #e0c15c;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9em;
+      color: #666;
+      opacity: 0;
+      animation: fadeIn 2s ease-out 5.5s forwards;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    /* Modal */
+    .modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: all 0.3s ease-out;
+      z-index: 10;
+    }
+
+    .modal.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: #1a1a1a;
+      padding: 30px 40px;
+      border-radius: 10px;
+      text-align: center;
+      color: #fff;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+    }
+
+    .modal-content p {
+      margin-bottom: 20px;
+    }
+
+    .copy-btn, .close-btn {
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .copy-btn {
+      background: #fff;
+      color: #000;
+    }
+
+    .close-btn {
+      background: transparent;
+      color: #aaa;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 2.4em; }
+      p  { font-size: 1.1em; }
+      .btn { font-size: 1em; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>VESLORA</h1>
+    <p>Timeless elegance in progress.</p>
+    <button class="btn" onclick="openModal()">Contact us</button>
+    <footer>&copy; 2025 Veslora. All rights reserved.</footer>
+  </div>
+
+  <div class="modal" id="emailModal">
+    <div class="modal-content">
+      <p>Email: <strong id="emailText">info@veslora.com</strong></p>
+      <button class="copy-btn" onclick="copyEmail()">Copy</button>
+      <button class="close-btn" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const modal = document.getElementById('emailModal');
+    function openModal() {
+      modal.classList.add('show');
+    }
+    function closeModal() {
+      modal.classList.remove('show');
+    }
+    function copyEmail() {
+      const txt = document.getElementById('emailText').innerText;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(txt).then(() => alert('Copied: ' + txt));
+      } else {
+        const temp = document.createElement('input');
+        temp.value = txt;
+        document.body.appendChild(temp);
+        temp.select();
+        document.execCommand("copy");
+        document.body.removeChild(temp);
+        alert('Copied: ' + txt);
+      }
+    }
+  </script>
+</body>
+</html>
