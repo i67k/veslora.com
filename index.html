@@ -171,16 +171,52 @@
     @keyframes blink { 50% { border-color:transparent; } }
     @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
-    @media (max-width:600px){
-      .hero{
-        background:
-          linear-gradient(180deg, rgba(0,0,0,0.78) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.35) 100%),
-          url("assets/hero.jpg") center/cover no-repeat;
-      }
-      .modal-actions{ justify-content:stretch; }
-      .modal-actions .btn{ width:100%; }
-      .actions .btn{ width:100%; }
-    }
+@media (max-width:600px){
+
+  .hero{
+    padding: 18px 14px;
+    background:
+      linear-gradient(180deg,
+        rgba(0,0,0,0.82) 0%,
+        rgba(0,0,0,0.60) 55%,
+        rgba(0,0,0,0.35) 100%
+      ),
+      url("assets/spray-1514264_1920.jpg") center/cover no-repeat;
+  }
+
+  .content{
+    width: 100%;
+    max-width: none;
+    padding-left: 6px;   /* <<< weiter nach links */
+    gap: 18px;
+  }
+
+  .brand{
+    font-size: 3.4rem;   /* <<< deutlich groesser */
+    letter-spacing: 0.20em;
+  }
+
+  .tagline{
+    font-size: 1.15rem;
+    max-width: 90%;
+  }
+
+  .actions{
+    gap: 10px;
+  }
+
+  .actions .btn{
+    width: auto;
+    padding: 12px 18px;
+  }
+
+  .footer{
+    left: 14px;
+    bottom: 14px;
+    font-size: 0.85rem;
+  }
+}
+
 
     @media (prefers-reduced-motion: reduce){
       *{animation:none!important;transition:none!important;}
