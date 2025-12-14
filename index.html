@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="assets/hero.jpg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Veslora</title>
 
   <meta name="description" content="Veslora is a contemporary luxury brand. Timeless, minimal, intentional.">
@@ -34,7 +34,6 @@
         url("assets/hero.jpg") center/cover no-repeat;
     }
 
-    /* subtle film grain look (optional, elegant) */
     .hero::after{
       content:"";
       position:absolute; inset:0;
@@ -49,7 +48,7 @@
       position:relative;
       display:grid;
       gap:22px;
-      padding: 10px;
+      padding:10px;
     }
 
     .brand{
@@ -60,7 +59,6 @@
       font-size:clamp(3.0rem, 6vw, 5.3rem);
       line-height:1.05;
 
-      /* typing effect like cursor */
       white-space:nowrap;
       overflow:hidden;
       border-right:2px solid rgba(242,242,242,0.85);
@@ -72,7 +70,7 @@
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size:clamp(1.05rem, 1.6vw, 1.25rem);
       color:rgba(242,242,242,0.78);
-      max-width: 44ch;
+      max-width:44ch;
       opacity:0;
       transform: translateY(8px);
       animation: fadeUp 900ms ease-out 2.6s forwards;
@@ -113,14 +111,14 @@
       border-color: rgba(242,242,242,0.9);
     }
     .btn-primary:hover{
-      background: #ffffff;
-      border-color: #ffffff;
+      background:#ffffff;
+      border-color:#ffffff;
     }
 
     .footer{
-      position: absolute;
-      left: 24px;
-      bottom: 18px;
+      position:absolute;
+      left:24px;
+      bottom:18px;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
       font-size:0.9rem;
       color: rgba(242,242,242,0.45);
@@ -171,52 +169,55 @@
     @keyframes blink { 50% { border-color:transparent; } }
     @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
 
-@media (max-width:600px){
+    /* MOBILE: weiter links + groesser */
+    @media (max-width:600px){
 
-  .hero{
-    padding: 18px 14px;
-    background:
-      linear-gradient(180deg,
-        rgba(0,0,0,0.82) 0%,
-        rgba(0,0,0,0.60) 55%,
-        rgba(0,0,0,0.35) 100%
-      ),
-      url("assets/spray-1514264_1920.jpg") center/cover no-repeat;
-  }
+      .hero{
+        align-items:flex-start;
+        justify-content:flex-start;
+        padding: 86px 14px 24px 12px;
 
-  .content{
-    width: 100%;
-    max-width: none;
-    padding-left: 6px;   /* <<< weiter nach links */
-    gap: 18px;
-  }
+        background:
+          linear-gradient(180deg,
+            rgba(0,0,0,0.88) 0%,
+            rgba(0,0,0,0.62) 55%,
+            rgba(0,0,0,0.38) 100%
+          ),
+          url("assets/hero.jpg") center/cover no-repeat;
+      }
 
-  .brand{
-    font-size: 3.4rem;   /* <<< deutlich groesser */
-    letter-spacing: 0.20em;
-  }
+      .content{
+        width:100%;
+        max-width:none;
+        padding-left: 0px;
+        gap:16px;
+      }
 
-  .tagline{
-    font-size: 1.15rem;
-    max-width: 90%;
-  }
+      .brand{
+        font-size: 3.85rem;
+        letter-spacing: 0.22em;
+      }
 
-  .actions{
-    gap: 10px;
-  }
+      .tagline{
+        font-size: 1.15rem;
+        max-width: 88%;
+        line-height: 1.45;
+      }
 
-  .actions .btn{
-    width: auto;
-    padding: 12px 18px;
-  }
+      .actions{
+        gap:10px;
+      }
 
-  .footer{
-    left: 14px;
-    bottom: 14px;
-    font-size: 0.85rem;
-  }
-}
+      .actions .btn{
+        padding: 11px 18px;
+      }
 
+      .footer{
+        left:12px;
+        bottom:12px;
+        font-size:0.82rem;
+      }
+    }
 
     @media (prefers-reduced-motion: reduce){
       *{animation:none!important;transition:none!important;}
