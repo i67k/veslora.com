@@ -4,253 +4,235 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Veslora</title>
- <link rel="icon" type="image/svg+xml" href="/assets/veslora-logo-new.svg">
-
+  
   <meta name="description" content="Veslora is a contemporary luxury brand. Timeless, minimal, intentional.">
   <link rel="canonical" href="https://veslora.com/" />
+  
+  <link rel="icon" type="image/svg+xml" href="/assets/veslora-logo-new.svg">
+  <link rel="apple-touch-icon" href="/assets/veslora-logo-new.svg">
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Veslora",
+      "url": "https://veslora.com",
+      "logo": "https://veslora.com/assets/veslora-logo-new.svg"
+    }
+  </script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&display=swap" rel="stylesheet">
 
   <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{height:100%;}
-    body{
-      background:#0f0f10;
-      color:#f2f2f2;
-      -webkit-font-smoothing:antialiased;
-      text-rendering:optimizeLegibility;
-      overflow-x:hidden;
+    /* RESET & BASE */
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    html, body { height:100%; }
+
+    body {
+      background-color: #0a0a0b;
+      color: #e8e8e8;
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
 
-    /* HERO */
-    .hero{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      position:relative;
-      padding:24px;
-      background:
-        linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.30) 100%),
+    /* TEXTURE OVERLAY */
+    .noise-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 2;
+      opacity: 0.04;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* HERO SECTION */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 0 8vw;
+      background: 
+        linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%),
         url("assets/hero.jpg") center/cover no-repeat;
+      background-color: #0f0f10;
     }
 
-    .hero::after{
-      content:"";
-      position:absolute; inset:0;
-      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.06), transparent 55%);
-      pointer-events:none;
-      mix-blend-mode:soft-light;
-      opacity:0.7;
+    .content {
+      position: relative;
+      z-index: 3;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
 
-    .content{
-      width:min(920px,100%);
-      position:relative;
-      display:grid;
-      gap:22px;
-      padding:10px;
+    /* TYPOGRAPHY */
+    .brand {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      font-style: italic;
+      font-size: clamp(3.5rem, 8vw, 6.5rem);
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+      color: #fff;
+      filter: blur(12px);
+      opacity: 0;
+      transform: translateY(10px);
+      animation: cinematicReveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
     }
 
-    .brand{
-      font-family:"Cormorant Garamond", serif;
-      font-weight:700;
-      letter-spacing:0.22em;
-      text-transform:uppercase;
-      font-size:clamp(3.0rem, 6vw, 5.3rem);
-      line-height:1.05;
-
-      white-space:nowrap;
-      overflow:hidden;
-      border-right:2px solid rgba(242,242,242,0.85);
-      width:0;
-      animation: typing 1.5s steps(7,end) 200ms forwards, blink 500ms step-end infinite;
-display: inline-block;
+    .tagline {
+      font-size: clamp(1rem, 1.2vw, 1.15rem);
+      font-weight: 300;
+      line-height: 1.6;
+      color: rgba(232, 232, 232, 0.8);
+      max-width: 380px;
+      border-left: 1px solid rgba(255,255,255,0.2);
+      padding-left: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 1.2s ease-out 0.6s forwards;
     }
 
-    .tagline{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size:clamp(1.05rem, 1.6vw, 1.25rem);
-      color:rgba(242,242,242,0.78);
-      max-width:44ch;
-      opacity:0;
-      transform: translateY(8px);
-      animation: fadeUp 900ms ease-out 2.6s forwards;
+    /* BUTTONS */
+    .actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 10px;
+      opacity: 0;
+      animation: fadeUp 1.2s ease-out 0.9s forwards;
     }
 
-    .actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      align-items:center;
-      opacity:0;
-      transform: translateY(8px);
-      animation: fadeUp 900ms ease-out 3.0s forwards;
+    .btn {
+      appearance: none;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      backdrop-filter: blur(4px);
     }
 
-    .btn{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-weight:600;
-      font-size:0.98rem;
-      padding:12px 18px;
-      border-radius:999px;
-      cursor:pointer;
-      border:1px solid rgba(242,242,242,0.22);
-      background: rgba(0,0,0,0.25);
-      color:#f2f2f2;
-      transition: transform .15s ease, background .2s ease, border-color .2s ease;
-      backdrop-filter: blur(6px);
-    }
-    .btn:hover{
-      transform: translateY(-1px);
-      background: rgba(242,242,242,0.12);
-      border-color: rgba(242,242,242,0.35);
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.4);
+      transform: translateY(-2px);
     }
 
-    .btn-primary{
-      background: rgba(242,242,242,0.92);
-      color:#0f0f10;
-      border-color: rgba(242,242,242,0.9);
-    }
-    .btn-primary:hover{
-      background:#ffffff;
-      border-color:#ffffff;
+    .btn-primary {
+      background: #e8e8e8;
+      color: #0a0a0b;
+      border-color: #e8e8e8;
+      font-weight: 500;
     }
 
-    .footer{
-      position:absolute;
-      left:24px;
-      bottom:18px;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-size:0.9rem;
-      color: rgba(242,242,242,0.45);
+    .btn-primary:hover {
+      background: #fff;
+      box-shadow: 0 0 20px rgba(255,255,255,0.25);
     }
 
-    /* Modal */
-    .modal{
-      position:fixed; inset:0;
-      background: rgba(0,0,0,0.75);
-      display:grid; place-items:center;
-      padding:20px;
-      visibility:hidden; opacity:0;
-      transition: opacity .2s ease, visibility .2s ease;
-      z-index:10;
-    }
-    .modal.show{ visibility:visible; opacity:1; }
-
-    .modal-box{
-      width:min(520px, 100%);
-      background: rgba(15,15,16,0.92);
-      border:1px solid rgba(242,242,242,0.14);
-      border-radius:18px;
-      padding:22px 18px;
-      backdrop-filter: blur(10px);
+    /* FOOTER */
+    .footer {
+      position: absolute;
+      bottom: 30px;
+      left: 8vw;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: rgba(255,255,255,0.3);
+      z-index: 3;
     }
 
-    .email{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      font-weight:600;
-      font-size:1.02rem;
-      padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(242,242,242,0.14);
-      background: rgba(242,242,242,0.06);
-      color:#f2f2f2;
-      word-break: break-word;
-      margin: 12px 0 14px;
+    /* MODAL */
+    .modal {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(8px);
+      z-index: 50;
+      display: grid; place-items: center;
+      opacity: 0; visibility: hidden;
+      transition: all 0.4s ease;
+    }
+    .modal.show { opacity: 1; visibility: visible; }
+
+    .modal-box {
+      background: rgba(20, 20, 22, 0.85);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 40px;
+      width: min(90%, 450px);
+      border-radius: 2px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      transform: scale(0.95);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .modal.show .modal-box { transform: scale(1); }
+
+    .email-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      color: #fff;
+      margin-bottom: 30px;
+      text-align: center;
+      font-style: italic;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding-bottom: 10px;
     }
 
-    .modal-actions{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:flex-end;
+    .modal-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
     }
 
-    @keyframes typing { from { width:0 } to { width: 12.5ch } }
-    @keyframes blink { 50% { border-color:transparent; } }
-    @keyframes fadeUp { to { opacity:1; transform:translateY(0); } }
-
-    /* MOBILE: weiter links + groesser */
-    @media (max-width:600px){
-
-      .hero{
-        align-items:flex-start;
-        justify-content:flex-start;
-        padding: 86px 14px 24px 12px;
-
-        background:
-          linear-gradient(180deg,
-            rgba(0,0,0,0.88) 0%,
-            rgba(0,0,0,0.62) 55%,
-            rgba(0,0,0,0.38) 100%
-          ),
-          url("assets/hero.jpg") center/cover no-repeat;
-      }
-
-      .content{
-        width:100%;
-        max-width:none;
-        padding-left: 0px;
-        gap:16px;
-      }
-
-      .brand{
-        font-size: 3.85rem;
-        letter-spacing: 0.22em;
-      }
-
-      .tagline{
-        font-size: 1.15rem;
-        max-width: 88%;
-        line-height: 1.45;
-      }
-
-      .actions{
-        gap:10px;
-      }
-
-      .actions .btn{
-        padding: 11px 18px;
-      }
-
-      .footer{
-        left:12px;
-        bottom:12px;
-        font-size:0.82rem;
-      }
+    /* ANIMATIONS */
+    @keyframes cinematicReveal {
+      to { filter: blur(0); opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (prefers-reduced-motion: reduce){
-      *{animation:none!important;transition:none!important;}
-      .brand{width:auto;border-right:none;}
-      .tagline,.actions{opacity:1;transform:none;}
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .hero { padding: 0 20px; justify-content: flex-start; padding-top: 15vh; }
+      .brand { font-size: 4rem; }
+      .tagline { border-left: none; padding-left: 0; max-width: 100%; }
+      .footer { left: 20px; bottom: 20px; }
+      .actions { flex-direction: column; align-items: flex-start; width: 100%; }
+      .btn { width: 100%; text-align: center; }
     }
   </style>
 </head>
-
 <body>
+
+  <div class="noise-overlay"></div>
 
   <section class="hero">
     <div class="content">
-      <h1 class="brand">VESLORA</h1>
-      <p class="tagline">Minimal. Editorial. Intentional. A quiet luxury brand in progress.</p>
+      <h1 class="brand">Veslora.</h1>
+      <p class="tagline">Minimal. Editorial. Intentional.<br>A quiet luxury brand in progress.</p>
 
       <div class="actions">
-        <button class="btn btn-primary" onclick="openModal()">Contact</button>
-        <button class="btn" onclick="copyEmail()">Copy email</button>
+        <button class="btn btn-primary" onclick="openModal()">Contact Us</button>
+        <button class="btn" onclick="copyEmail()">Copy Email</button>
       </div>
     </div>
-
-    <div class="footer">&copy; 2025 Veslora</div>
+    
+    <div class="footer">
+      Est. 2025 &mdash; Zurich
+    </div>
   </section>
 
-  <div class="modal" id="emailModal" role="dialog" aria-modal="true">
+  <div class="modal" id="emailModal">
     <div class="modal-box">
-      <div class="email" id="emailText">info@veslora.com</div>
+      <div class="email-display" id="emailText">info@veslora.com</div>
       <div class="modal-actions">
-        <button class="btn" onclick="openMail()">Open mail</button>
-        <button class="btn btn-primary" onclick="copyEmail()">Copy</button>
+        <button class="btn btn-primary" onclick="openMail()">Open Mail</button>
+        <button class="btn" onclick="copyEmail()">Copy</button>
         <button class="btn" onclick="closeModal()">Close</button>
       </div>
     </div>
@@ -262,28 +244,11 @@ display: inline-block;
 
     function openModal(){ modal.classList.add('show'); }
     function closeModal(){ modal.classList.remove('show'); }
-
-    function openMail(){
-      const email = emailEl.textContent.trim();
-      window.location.href = "mailto:" + encodeURIComponent(email);
-    }
+    function openMail(){ window.location.href = "mailto:" + emailEl.textContent.trim(); }
 
     async function copyEmail(){
       const txt = emailEl.textContent.trim();
-      try{
-        if (navigator.clipboard && window.isSecureContext){
-          await navigator.clipboard.writeText(txt);
-        } else {
-          const temp = document.createElement('textarea');
-          temp.value = txt;
-          temp.style.position = 'fixed';
-          temp.style.left = '-9999px';
-          document.body.appendChild(temp);
-          temp.select();
-          document.execCommand('copy');
-          document.body.removeChild(temp);
-        }
-      } catch(e) {}
+      try { await navigator.clipboard.writeText(txt); } catch(e) {}
     }
 
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
