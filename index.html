@@ -7,7 +7,6 @@
   
   <meta name="description" content="Veslora is a contemporary luxury brand. Timeless, minimal, intentional.">
   <link rel="canonical" href="https://veslora.com/" />
-  
   <link rel="icon" type="image/svg+xml" href="/assets/veslora-logo-new.svg">
   <link rel="apple-touch-icon" href="/assets/veslora-logo-new.svg">
 
@@ -24,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&display=swap" rel="stylesheet">
 
   <style>
-    /* RESET & BASE */
+    /* BASE SETTINGS */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; }
 
@@ -36,14 +35,14 @@
       overflow-x: hidden;
     }
 
-    /* TEXTURE OVERLAY */
+    /* FILM GRAIN TEXTURE */
     .noise-overlay {
       position: fixed; inset: 0; pointer-events: none; z-index: 2;
       opacity: 0.04;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    /* HERO SECTION */
+    /* HERO LAYOUT */
     .hero {
       position: relative;
       min-height: 100vh;
@@ -51,7 +50,7 @@
       align-items: center;
       padding: 0 8vw;
       background: 
-        linear-gradient(to right, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%),
+        linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 100%),
         url("assets/hero.jpg") center/cover no-repeat;
       background-color: #0f0f10;
     }
@@ -59,10 +58,12 @@
     .content {
       position: relative;
       z-index: 3;
-      max-width: 600px;
+      max-width: 700px;
       display: flex;
       flex-direction: column;
-      gap: 2rem;
+      gap: 1.5rem;
+      /* Pre-reserves vertical space so layout is stable */
+      min-height: 250px; 
     }
 
     /* TYPOGRAPHY */
@@ -70,14 +71,44 @@
       font-family: 'Cormorant Garamond', serif;
       font-weight: 600;
       font-style: italic;
-      font-size: clamp(3.5rem, 8vw, 6.5rem);
-      line-height: 0.9;
+      /* Reduced minimum slightly to prevent mobile wrapping */
+      font-size: clamp(2.8rem, 8vw, 6.5rem); 
+      line-height: 1.1;
       letter-spacing: -0.02em;
       color: #fff;
-      filter: blur(12px);
+      
+      /* PREVENTS JUMPING: Forces text to 1 line & locks height */
+      white-space: nowrap; 
+      min-height: 1.1em;
+      display: inline-block;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 3px;
+      background-color: rgba(255,255,255,0.8);
+      height: 0.8em;
+      margin-left: 8px;
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+      transform: translateY(-8%);
+    }
+
+    .cursor.stopped {
+      animation: none;
       opacity: 0;
-      transform: translateY(10px);
-      animation: cinematicReveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      transition: opacity 1s ease;
+    }
+
+    /* TAGLINE & BUTTONS */
+    .fade-wrapper {
+      opacity: 0;
+      transform: translateY(15px);
+      transition: opacity 1.2s ease, transform 1.2s ease;
+    }
+    .fade-wrapper.visible {
+      opacity: 1;
+      transform: translateY(0);
     }
 
     .tagline {
@@ -85,23 +116,18 @@
       font-weight: 300;
       line-height: 1.6;
       color: rgba(232, 232, 232, 0.8);
-      max-width: 380px;
+      max-width: 420px;
       border-left: 1px solid rgba(255,255,255,0.2);
       padding-left: 20px;
-      opacity: 0;
-      transform: translateY(10px);
-      animation: fadeUp 1.2s ease-out 0.6s forwards;
+      margin-bottom: 24px;
     }
 
-    /* BUTTONS */
     .actions {
       display: flex;
       gap: 16px;
-      margin-top: 10px;
-      opacity: 0;
-      animation: fadeUp 1.2s ease-out 0.9s forwards;
     }
 
+    /* BUTTONS */
     .btn {
       appearance: none;
       border: 1px solid rgba(255, 255, 255, 0.15);
@@ -116,20 +142,17 @@
       transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       backdrop-filter: blur(4px);
     }
-
     .btn:hover {
       background: rgba(255, 255, 255, 0.1);
       border-color: rgba(255, 255, 255, 0.4);
       transform: translateY(-2px);
     }
-
     .btn-primary {
       background: #e8e8e8;
       color: #0a0a0b;
       border-color: #e8e8e8;
       font-weight: 500;
     }
-
     .btn-primary:hover {
       background: #fff;
       box-shadow: 0 0 20px rgba(255,255,255,0.25);
@@ -158,19 +181,16 @@
       transition: all 0.4s ease;
     }
     .modal.show { opacity: 1; visibility: visible; }
-
     .modal-box {
       background: rgba(20, 20, 22, 0.85);
       border: 1px solid rgba(255,255,255,0.08);
       padding: 40px;
       width: min(90%, 450px);
-      border-radius: 2px;
       box-shadow: 0 20px 50px rgba(0,0,0,0.5);
       transform: scale(0.95);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .modal.show .modal-box { transform: scale(1); }
-
     .email-display {
       font-family: 'Cormorant Garamond', serif;
       font-size: 1.8rem;
@@ -181,28 +201,18 @@
       border-bottom: 1px solid rgba(255,255,255,0.1);
       padding-bottom: 10px;
     }
+    .modal-actions { display: flex; justify-content: center; gap: 12px; }
 
-    .modal-actions {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-    }
+    @keyframes blink { 50% { opacity: 0; } }
 
-    /* ANIMATIONS */
-    @keyframes cinematicReveal {
-      to { filter: blur(0); opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* MOBILE */
+    /* MOBILE ADJUSTMENTS */
     @media (max-width: 768px) {
       .hero { padding: 0 20px; justify-content: flex-start; padding-top: 15vh; }
-      .brand { font-size: 4rem; }
-      .tagline { border-left: none; padding-left: 0; max-width: 100%; }
+      /* Ensure font size doesn't force wrapping on small screens */
+      .brand { font-size: 3rem; }
+      .tagline { border-left: none; padding-left: 0; }
       .footer { left: 20px; bottom: 20px; }
-      .actions { flex-direction: column; align-items: flex-start; width: 100%; }
+      .actions { flex-direction: column; width: 100%; }
       .btn { width: 100%; text-align: center; }
     }
   </style>
@@ -213,18 +223,20 @@
 
   <section class="hero">
     <div class="content">
-      <h1 class="brand">Veslora.</h1>
-      <p class="tagline">Minimal. Editorial. Intentional.<br>A quiet luxury brand in progress.</p>
-
-      <div class="actions">
-        <button class="btn btn-primary" onclick="openModal()">Contact Us</button>
-        <button class="btn" onclick="copyEmail()">Copy Email</button>
+      <h1 class="brand">
+        <span id="type-text"></span><span class="cursor" id="cursor"></span>
+      </h1>
+      
+      <div class="fade-wrapper" id="fadeContent">
+        <p class="tagline">Minimal. Editorial. Intentional.<br>A quiet luxury brand in progress.</p>
+        <div class="actions">
+          <button class="btn btn-primary" onclick="openModal()">Contact Us</button>
+          <button class="btn" onclick="copyEmail()">Copy Email</button>
+        </div>
       </div>
     </div>
     
-    <div class="footer">
-      Est. 2025 &mdash; Zurich
-    </div>
+    <div class="footer">Est. 2025 &mdash; Zurich</div>
   </section>
 
   <div class="modal" id="emailModal">
@@ -239,18 +251,66 @@
   </div>
 
   <script>
+    const textElement = document.getElementById('type-text');
+    const cursor = document.getElementById('cursor');
+    const fadeContent = document.getElementById('fadeContent');
+
+    // Sequence: Type Veslora (Show buttons immediately) -> Delete -> Type Quiet Luxury -> Delete -> Type Veslora.
+    const sequence = [
+      { text: "Veslora", delay: 1500, triggerFade: true },
+      { delete: true, delay: 400 },
+      { text: "Quiet Luxury", delay: 1400 },
+      { delete: true, delay: 400 },
+      { text: "Veslora.", delay: 0 }
+    ];
+
+    let currentText = "";
+    
+    // Typing Speed (Lower = Faster)
+    const typeSpeed = () => 45 + Math.random() * 25; 
+    const deleteSpeed = () => 25 + Math.random() * 20;
+
+    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    async function typeWriter() {
+      await wait(500); // Brief start delay
+
+      for (const step of sequence) {
+        if (step.delete) {
+          while (currentText.length > 0) {
+            currentText = currentText.slice(0, -1);
+            textElement.textContent = currentText;
+            await wait(deleteSpeed());
+          }
+        } else {
+          const target = step.text;
+          for (let i = 0; i < target.length; i++) {
+            currentText += target[i];
+            textElement.textContent = currentText;
+            
+            // On the very first step, if we just typed "Veslora", fade in buttons immediately
+            if (step.triggerFade && currentText === target) {
+              fadeContent.classList.add('visible');
+            }
+            
+            await wait(typeSpeed());
+          }
+        }
+        if (step.delay) await wait(step.delay);
+      }
+
+      cursor.classList.add('stopped');
+    }
+
+    typeWriter();
+
+    // Modal & Copy
     const modal = document.getElementById('emailModal');
     const emailEl = document.getElementById('emailText');
-
     function openModal(){ modal.classList.add('show'); }
     function closeModal(){ modal.classList.remove('show'); }
     function openMail(){ window.location.href = "mailto:" + emailEl.textContent.trim(); }
-
-    async function copyEmail(){
-      const txt = emailEl.textContent.trim();
-      try { await navigator.clipboard.writeText(txt); } catch(e) {}
-    }
-
+    async function copyEmail(){ try { await navigator.clipboard.writeText(emailEl.textContent.trim()); } catch(e) {} }
     modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
   </script>
