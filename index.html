@@ -25,16 +25,19 @@
   <style>
     /* BASE SETTINGS */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html, body { height:100%; overflow: hidden; /* Prevents scrollbars during parallax */ }
+    html, body { height:100%; }
 
     body {
       background-color: #0a0a0b;
       color: #e8e8e8;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
+      /* FIX: Allow vertical scroll, hide horizontal only */
+      overflow-x: hidden; 
+      overflow-y: auto; 
     }
 
-    /* SELECTION COLOR (Luxury Touch) */
+    /* SELECTION COLOR */
     ::selection { background: rgba(255, 255, 255, 0.2); color: #fff; }
 
     /* FILM GRAIN TEXTURE */
@@ -46,19 +49,21 @@
 
     /* BACKGROUND PARALLAX WRAPPER */
     .bg-wrapper {
-      position: absolute; inset: -50px; /* Make it larger so it can move */
+      /* FIX: Changed to fixed so it doesn't scroll away */
+      position: fixed; 
+      inset: -50px;
       z-index: 1;
       background: 
         linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 100%),
         url("assets/hero.jpg") center/cover no-repeat;
       background-color: #0f0f10;
-      transition: transform 0.1s linear; /* Smooth movement */
+      transition: transform 0.1s linear;
     }
 
     /* HERO LAYOUT */
     .hero {
       position: relative;
-      height: 100vh;
+      min-height: 100vh; /* Ensure it fills at least one screen */
       display: flex;
       align-items: center;
       padding: 0 8vw;
@@ -72,6 +77,8 @@
       flex-direction: column;
       gap: 1.5rem;
       min-height: 250px; 
+      /* Add some margin on mobile so it doesn't hit edges */
+      margin: 40px 0; 
     }
 
     /* TYPOGRAPHY */
@@ -86,7 +93,7 @@
       white-space: nowrap; 
       min-height: 1.1em;
       display: inline-block;
-      text-shadow: 0 4px 20px rgba(0,0,0,0.3); /* Subtle depth */
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3);
     }
 
     .cursor {
@@ -159,13 +166,11 @@
       bottom: 30px;
       left: 8vw;
       z-index: 3;
-      
       font-family: 'Inter', sans-serif;
       font-size: 0.7rem;
       text-transform: uppercase;
       letter-spacing: 0.15em;
       color: rgba(255,255,255,0.35);
-      
       display: flex;
       gap: 1.5rem;
       align-items: center;
@@ -183,8 +188,8 @@
     /* MODAL */
     .modal {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.7); /* Slightly darker */
-      backdrop-filter: blur(10px); /* Stronger blur */
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px);
       z-index: 50;
       display: grid; place-items: center;
       opacity: 0; visibility: hidden;
@@ -220,8 +225,12 @@
       .hero { padding: 0 20px; justify-content: flex-start; padding-top: 15vh; }
       .brand { font-size: 3rem; }
       .tagline { border-left: none; padding-left: 0; }
+      /* Allow footer to flow naturally on scroll */
       .footer { 
-        left: 20px; bottom: 20px; 
+        position: relative; /* Changed from absolute to flow with text */
+        bottom: auto; left: auto;
+        margin-top: 60px;
+        padding-bottom: 30px;
         flex-direction: column; 
         align-items: flex-start; 
         gap: 0.5rem; 
@@ -251,13 +260,13 @@
           <button class="btn" onclick="copyEmail()">Copy Email</button>
         </div>
       </div>
-    </div>
-    
-    <div class="footer">
-      <span>ZH</span>
-      <span>47.37° N &bull; 08.54° E</span>
-      <span>#0A0A0B</span>
-      <span>EST. 2025</span>
+
+      <div class="footer">
+        <span>ZH</span>
+        <span>47.37° N &bull; 08.54° E</span>
+        <span>#0A0A0B</span>
+        <span>EST. 2025</span>
+      </div>
     </div>
   </section>
 
@@ -273,7 +282,6 @@
   </div>
 
   <script>
-    // --- TYPING ENGINE ---
     const textElement = document.getElementById('type-text');
     const cursor = document.getElementById('cursor');
     const fadeContent = document.getElementById('fadeContent');
@@ -317,18 +325,13 @@
     }
     typeWriter();
 
-    // --- MOUSE PARALLAX EFFECT ---
     const bg = document.getElementById('bgParallax');
     document.addEventListener('mousemove', (e) => {
-      // Calculate % of movement relative to screen center
       const x = (window.innerWidth - e.pageX * 2) / 100;
       const y = (window.innerHeight - e.pageY * 2) / 100;
-      
-      // Move background slightly
       bg.style.transform = `translate(${x}px, ${y}px)`;
     });
 
-    // --- MODAL & UTILS ---
     const modal = document.getElementById('emailModal');
     const emailEl = document.getElementById('emailText');
     function openModal(){ modal.classList.add('show'); }
