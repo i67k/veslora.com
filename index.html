@@ -16,7 +16,7 @@
       background-color: #000;
       color: #e8e8e8;
       font-family: 'Inter', sans-serif;
-      overflow: hidden; 
+      overflow: hidden; /* Prevents scrollbars globally */
     }
 
     .noise-overlay {
@@ -33,8 +33,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        /* UPDATED: Ultra fast fade out (0.3s) */
-        transition: opacity 0.3s ease;
+        transition: opacity 0.3s ease; /* Fast fade out */
     }
 
     .spotlight-text {
@@ -93,7 +92,7 @@
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      min-height: 250px; 
+      /* Removes the min-height hack, relies on locked element heights */
       margin: 40px 0; 
     }
 
@@ -101,12 +100,16 @@
       font-family: 'Cormorant Garamond', serif;
       font-weight: 600;
       font-style: italic;
-      font-size: clamp(2.8rem, 8vw, 6.5rem); 
+      /* Slightly smaller min-size to help mobile fitting */
+      font-size: clamp(2.2rem, 8vw, 6.5rem); 
       line-height: 1.1;
       color: #fff;
-      white-space: nowrap; 
-      min-height: 1.1em;
-      display: inline-block;
+      
+      /* FIX FOR JUMPING BUTTONS: */
+      white-space: nowrap; /* Forces one line always */
+      height: 1.2em;       /* Locks vertical height */
+      display: block;      /* Ensures height takes effect */
+      overflow: visible;   /* Allows text to bleed out if too long */
     }
 
     .cursor {
@@ -147,13 +150,13 @@
     .btn-primary { background: #e8e8e8; color: #0a0a0b; border-color: #e8e8e8; font-weight: 500; }
     .btn-primary:hover { background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.25); }
 
-    /* Footer: Fixiert ganz unten */
+    /* Footer: Absolutely positioned at bottom */
     .footer {
       position: absolute; 
-      bottom: 20px; /* Ganz unten */
+      bottom: 25px; 
       left: 8vw; 
       z-index: 3;
-      font-family: 'Inter', sans-serif; font-size: 0.7rem;
+      font-family: 'Inter', sans-serif; font-size: 0.75rem;
       text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.35);
       display: flex; gap: 1.5rem; align-items: center;
     }
@@ -183,15 +186,13 @@
 
     @media (max-width: 768px) {
       .hero { padding: 0 20px; justify-content: flex-start; padding-top: 15vh; }
-      .brand { font-size: 3rem; }
+      .brand { font-size: 2.8rem; } /* Explicit mobile size */
       .tagline { border-left: none; padding-left: 0; }
       
-      /* Mobile Footer: Auch fixiert ganz unten */
       .footer { 
-        position: absolute; 
-        bottom: 20px; 
         left: 0; width: 100%;
-        justify-content: center; /* Zentriert auf Mobile */
+        justify-content: center;
+        bottom: 25px; 
       }
       
       .actions { flex-direction: column; width: 100%; }
@@ -246,7 +247,7 @@
   <script>
     const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     
-    // --- 1. INTRO LOGIK ---
+    // --- 1. INTRO LOGIC ---
     const brandName = "VESLORA";
     const spotlightDiv = document.getElementById('spotlight-text');
     const introLayer = document.getElementById('intro-layer');
@@ -266,13 +267,11 @@
             await wait(timePerStep);
         }
 
-        // UPDATED: Kürzere Wartezeit am Ende (300ms)
         await wait(300); 
 
-        // UPDATED: Schnellerer Fade (CSS ist auf 0.3s gesetzt)
         introLayer.style.opacity = '0'; 
         
-        await wait(300); // Wartet exakt auf die Transition
+        await wait(300); 
         introLayer.style.display = 'none'; 
         
         mainContent.style.opacity = '1';
