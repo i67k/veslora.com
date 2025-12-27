@@ -1,3 +1,9 @@
+Hier ist die angepasste Version.
+Ich habe die Geschwindigkeit des Intros mehr als verdoppelt. Das wirkt jetzt viel energischer und erinnert an einen schnellen Mode-Schnitt ("Fast Cut").
+Die Änderungen:
+ * CSS: Die Animation dauert jetzt nur noch 0.4 Sekunden (statt 0.9s).
+ * JavaScript: Der Wechsel zum nächsten Buchstaben passiert alle 350 Millisekunden (statt 800ms).
+Kopiere den gesamten Code:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +39,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        transition: opacity 1.0s ease;
+        transition: opacity 1.0s ease; /* Fade-out etwas schneller */
     }
 
     .spotlight-letter {
@@ -50,6 +56,7 @@
         filter: blur(20px);
     }
 
+    /* HIER GEÄNDERT: Viel schneller (0.4s statt 0.9s) */
     .flash-animate {
         animation: flashSequence 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
@@ -223,6 +230,9 @@
         </div>
 
         <div class="footer">
+          <span>ZH</span>
+          <span>47.37° N &bull; 08.54° E</span>
+          <span>#0A0A0B</span>
           <span>EST. 2025</span>
         </div>
       </div>
@@ -251,6 +261,8 @@
 
     async function playIntro() {
         const chars = brandName.split('');
+        
+        // HIER GEÄNDERT: Viel schneller (350ms statt 800ms)
         const timePerLetter = 350; 
         
         for (let i = 0; i < chars.length; i++) {
@@ -336,3 +348,4 @@
   </script>
 </body>
 </html>
+
