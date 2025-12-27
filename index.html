@@ -25,44 +25,52 @@
   <style>
     /* BASE SETTINGS */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-    html, body { height:100%; }
+    html, body { height:100%; overflow: hidden; /* Prevents scrollbars during parallax */ }
 
     body {
       background-color: #0a0a0b;
       color: #e8e8e8;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
     }
+
+    /* SELECTION COLOR (Luxury Touch) */
+    ::selection { background: rgba(255, 255, 255, 0.2); color: #fff; }
 
     /* FILM GRAIN TEXTURE */
     .noise-overlay {
-      position: fixed; inset: 0; pointer-events: none; z-index: 2;
+      position: fixed; inset: 0; pointer-events: none; z-index: 5;
       opacity: 0.04;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    }
+
+    /* BACKGROUND PARALLAX WRAPPER */
+    .bg-wrapper {
+      position: absolute; inset: -50px; /* Make it larger so it can move */
+      z-index: 1;
+      background: 
+        linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 100%),
+        url("assets/hero.jpg") center/cover no-repeat;
+      background-color: #0f0f10;
+      transition: transform 0.1s linear; /* Smooth movement */
     }
 
     /* HERO LAYOUT */
     .hero {
       position: relative;
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       align-items: center;
       padding: 0 8vw;
-      background: 
-        linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 100%),
-        url("assets/hero.jpg") center/cover no-repeat;
-      background-color: #0f0f10;
+      z-index: 3;
     }
 
     .content {
       position: relative;
-      z-index: 3;
       max-width: 700px;
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
-      /* Pre-reserves vertical space so layout is stable */
       min-height: 250px; 
     }
 
@@ -71,16 +79,14 @@
       font-family: 'Cormorant Garamond', serif;
       font-weight: 600;
       font-style: italic;
-      /* Reduced minimum slightly to prevent mobile wrapping */
       font-size: clamp(2.8rem, 8vw, 6.5rem); 
       line-height: 1.1;
       letter-spacing: -0.02em;
       color: #fff;
-      
-      /* PREVENTS JUMPING: Forces text to 1 line & locks height */
       white-space: nowrap; 
       min-height: 1.1em;
       display: inline-block;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.3); /* Subtle depth */
     }
 
     .cursor {
@@ -93,23 +99,15 @@
       vertical-align: middle;
       transform: translateY(-8%);
     }
+    .cursor.stopped { animation: none; opacity: 0; transition: opacity 1s ease; }
 
-    .cursor.stopped {
-      animation: none;
-      opacity: 0;
-      transition: opacity 1s ease;
-    }
-
-    /* TAGLINE & BUTTONS */
+    /* FADE ELEMENTS */
     .fade-wrapper {
       opacity: 0;
       transform: translateY(15px);
       transition: opacity 1.2s ease, transform 1.2s ease;
     }
-    .fade-wrapper.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    .fade-wrapper.visible { opacity: 1; transform: translateY(0); }
 
     .tagline {
       font-size: clamp(1rem, 1.2vw, 1.15rem);
@@ -122,10 +120,7 @@
       margin-bottom: 24px;
     }
 
-    .actions {
-      display: flex;
-      gap: 16px;
-    }
+    .actions { display: flex; gap: 16px; }
 
     /* BUTTONS */
     .btn {
@@ -158,23 +153,38 @@
       box-shadow: 0 0 20px rgba(255,255,255,0.25);
     }
 
-    /* FOOTER */
+    /* TECH FOOTER */
     .footer {
       position: absolute;
       bottom: 30px;
       left: 8vw;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: rgba(255,255,255,0.3);
       z-index: 3;
+      
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: rgba(255,255,255,0.35);
+      
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .footer span { position: relative; }
+    .footer span:not(:last-child)::after {
+      content: "";
+      position: absolute; right: -0.75rem; top: 50%;
+      transform: translateY(-50%);
+      width: 2px; height: 2px;
+      background: rgba(255,255,255,0.3);
+      border-radius: 50%;
     }
 
     /* MODAL */
     .modal {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.7); /* Slightly darker */
+      backdrop-filter: blur(10px); /* Stronger blur */
       z-index: 50;
       display: grid; place-items: center;
       opacity: 0; visibility: hidden;
@@ -182,11 +192,11 @@
     }
     .modal.show { opacity: 1; visibility: visible; }
     .modal-box {
-      background: rgba(20, 20, 22, 0.85);
+      background: rgba(15, 15, 17, 0.9);
       border: 1px solid rgba(255,255,255,0.08);
       padding: 40px;
       width: min(90%, 450px);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
       transform: scale(0.95);
       transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
@@ -205,13 +215,18 @@
 
     @keyframes blink { 50% { opacity: 0; } }
 
-    /* MOBILE ADJUSTMENTS */
+    /* MOBILE */
     @media (max-width: 768px) {
       .hero { padding: 0 20px; justify-content: flex-start; padding-top: 15vh; }
-      /* Ensure font size doesn't force wrapping on small screens */
       .brand { font-size: 3rem; }
       .tagline { border-left: none; padding-left: 0; }
-      .footer { left: 20px; bottom: 20px; }
+      .footer { 
+        left: 20px; bottom: 20px; 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 0.5rem; 
+      }
+      .footer span:not(:last-child)::after { display: none; }
       .actions { flex-direction: column; width: 100%; }
       .btn { width: 100%; text-align: center; }
     }
@@ -220,6 +235,8 @@
 <body>
 
   <div class="noise-overlay"></div>
+  
+  <div class="bg-wrapper" id="bgParallax"></div>
 
   <section class="hero">
     <div class="content">
@@ -236,7 +253,12 @@
       </div>
     </div>
     
-    <div class="footer">Est. 2025 &mdash; Zurich</div>
+    <div class="footer">
+      <span>ZH</span>
+      <span>47.37° N &bull; 08.54° E</span>
+      <span>#0A0A0B</span>
+      <span>EST. 2025</span>
+    </div>
   </section>
 
   <div class="modal" id="emailModal">
@@ -251,11 +273,11 @@
   </div>
 
   <script>
+    // --- TYPING ENGINE ---
     const textElement = document.getElementById('type-text');
     const cursor = document.getElementById('cursor');
     const fadeContent = document.getElementById('fadeContent');
 
-    // Sequence: Type Veslora (Show buttons immediately) -> Delete -> Type Quiet Luxury -> Delete -> Type Veslora.
     const sequence = [
       { text: "Veslora", delay: 1500, triggerFade: true },
       { delete: true, delay: 400 },
@@ -265,16 +287,12 @@
     ];
 
     let currentText = "";
-    
-    // Typing Speed (Lower = Faster)
     const typeSpeed = () => 45 + Math.random() * 25; 
     const deleteSpeed = () => 25 + Math.random() * 20;
-
     const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     async function typeWriter() {
-      await wait(500); // Brief start delay
-
+      await wait(500);
       for (const step of sequence) {
         if (step.delete) {
           while (currentText.length > 0) {
@@ -287,24 +305,30 @@
           for (let i = 0; i < target.length; i++) {
             currentText += target[i];
             textElement.textContent = currentText;
-            
-            // On the very first step, if we just typed "Veslora", fade in buttons immediately
             if (step.triggerFade && currentText === target) {
               fadeContent.classList.add('visible');
             }
-            
             await wait(typeSpeed());
           }
         }
         if (step.delay) await wait(step.delay);
       }
-
       cursor.classList.add('stopped');
     }
-
     typeWriter();
 
-    // Modal & Copy
+    // --- MOUSE PARALLAX EFFECT ---
+    const bg = document.getElementById('bgParallax');
+    document.addEventListener('mousemove', (e) => {
+      // Calculate % of movement relative to screen center
+      const x = (window.innerWidth - e.pageX * 2) / 100;
+      const y = (window.innerHeight - e.pageY * 2) / 100;
+      
+      // Move background slightly
+      bg.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    // --- MODAL & UTILS ---
     const modal = document.getElementById('emailModal');
     const emailEl = document.getElementById('emailText');
     function openModal(){ modal.classList.add('show'); }
