@@ -23,7 +23,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&display=swap" rel="stylesheet">
 
   <style>
-    /* BASE SETTINGS */
+    /* --- BASE SETTINGS --- */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; }
 
@@ -32,27 +32,68 @@
       color: #e8e8e8;
       font-family: 'Inter', sans-serif;
       -webkit-font-smoothing: antialiased;
-      /* FIX: Allow vertical scroll, hide horizontal only */
-      overflow-x: hidden; 
-      overflow-y: auto; 
+      /* Locked initially for intro */
+      overflow: hidden; 
     }
 
-    /* SELECTION COLOR */
-    ::selection { background: rgba(255, 255, 255, 0.2); color: #fff; }
-
-    /* FILM GRAIN TEXTURE */
+    /* --- SHARED TEXTURE --- */
     .noise-overlay {
-      position: fixed; inset: 0; pointer-events: none; z-index: 5;
-      opacity: 0.04;
+      position: fixed; inset: 0; pointer-events: none; z-index: 999;
+      opacity: 0.05;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    /* BACKGROUND PARALLAX WRAPPER */
+    /* =========================================
+       INTRO SEQUENCE (The Flash)
+       ========================================= */
+    #intro-layer {
+        position: fixed; inset: 0;
+        background-color: #000;
+        z-index: 500; /* Above everything */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 1.5s ease; /* Smooth fade out */
+    }
+
+    .spotlight-letter {
+        font-family: 'Cormorant Garamond', serif; /* Matching Brand Font */
+        font-size: 20vw; 
+        font-weight: 600;
+        font-style: italic;
+        color: transparent;
+        /* Metallic Gradient Effect */
+        background: linear-gradient(180deg, #fff 20%, #444 100%);
+        -webkit-background-clip: text;
+        background-clip: text;
+        opacity: 0;
+        transform: scale(0.8);
+        filter: blur(20px);
+    }
+
+    /* Animation: Flash In -> Flash Out */
+    .flash-animate {
+        animation: flashSequence 0.9s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+    }
+
+    @keyframes flashSequence {
+        0%   { opacity: 0; transform: scale(1.1); filter: blur(20px); }
+        20%  { opacity: 1; transform: scale(1);   filter: blur(0px); }
+        80%  { opacity: 1; transform: scale(1);   filter: blur(0px); }
+        100% { opacity: 0; transform: scale(0.9); filter: blur(10px); }
+    }
+
+
+    /* =========================================
+       MAIN SITE (Hidden underneath initially)
+       ========================================= */
+    .main-site {
+        opacity: 0; /* Starts hidden */
+        transition: opacity 2s ease;
+    }
+    
     .bg-wrapper {
-      /* FIX: Changed to fixed so it doesn't scroll away */
-      position: fixed; 
-      inset: -50px;
-      z-index: 1;
+      position: fixed; inset: -50px; z-index: 1;
       background: 
         linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 100%),
         url("assets/hero.jpg") center/cover no-repeat;
@@ -60,10 +101,9 @@
       transition: transform 0.1s linear;
     }
 
-    /* HERO LAYOUT */
     .hero {
       position: relative;
-      min-height: 100vh; /* Ensure it fills at least one screen */
+      min-height: 100vh;
       display: flex;
       align-items: center;
       padding: 0 8vw;
@@ -77,11 +117,9 @@
       flex-direction: column;
       gap: 1.5rem;
       min-height: 250px; 
-      /* Add some margin on mobile so it doesn't hit edges */
       margin: 40px 0; 
     }
 
-    /* TYPOGRAPHY */
     .brand {
       font-family: 'Cormorant Garamond', serif;
       font-weight: 600;
@@ -97,178 +135,131 @@
     }
 
     .cursor {
-      display: inline-block;
-      width: 3px;
+      display: inline-block; width: 3px; height: 0.8em;
       background-color: rgba(255,255,255,0.8);
-      height: 0.8em;
       margin-left: 8px;
       animation: blink 1s step-end infinite;
-      vertical-align: middle;
-      transform: translateY(-8%);
+      vertical-align: middle; transform: translateY(-8%);
     }
     .cursor.stopped { animation: none; opacity: 0; transition: opacity 1s ease; }
 
-    /* FADE ELEMENTS */
     .fade-wrapper {
-      opacity: 0;
-      transform: translateY(15px);
+      opacity: 0; transform: translateY(15px);
       transition: opacity 1.2s ease, transform 1.2s ease;
     }
     .fade-wrapper.visible { opacity: 1; transform: translateY(0); }
 
     .tagline {
       font-size: clamp(1rem, 1.2vw, 1.15rem);
-      font-weight: 300;
-      line-height: 1.6;
+      font-weight: 300; line-height: 1.6;
       color: rgba(232, 232, 232, 0.8);
       max-width: 420px;
       border-left: 1px solid rgba(255,255,255,0.2);
-      padding-left: 20px;
-      margin-bottom: 24px;
+      padding-left: 20px; margin-bottom: 24px;
     }
 
     .actions { display: flex; gap: 16px; }
 
-    /* BUTTONS */
     .btn {
-      appearance: none;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.03);
-      color: #fff;
-      padding: 14px 28px;
-      border-radius: 4px;
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      appearance: none; border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.03); color: #fff;
+      padding: 14px 28px; border-radius: 4px;
+      font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em;
+      cursor: pointer; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
       backdrop-filter: blur(4px);
     }
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.4);
-      transform: translateY(-2px);
-    }
-    .btn-primary {
-      background: #e8e8e8;
-      color: #0a0a0b;
-      border-color: #e8e8e8;
-      font-weight: 500;
-    }
-    .btn-primary:hover {
-      background: #fff;
-      box-shadow: 0 0 20px rgba(255,255,255,0.25);
-    }
+    .btn:hover { background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
+    .btn-primary { background: #e8e8e8; color: #0a0a0b; border-color: #e8e8e8; font-weight: 500; }
+    .btn-primary:hover { background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.25); }
 
-    /* TECH FOOTER */
     .footer {
-      position: absolute;
-      bottom: 30px;
-      left: 8vw;
-      z-index: 3;
-      font-family: 'Inter', sans-serif;
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: rgba(255,255,255,0.35);
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
+      position: absolute; bottom: 30px; left: 8vw; z-index: 3;
+      font-family: 'Inter', sans-serif; font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 0.15em; color: rgba(255,255,255,0.35);
+      display: flex; gap: 1.5rem; align-items: center;
     }
     .footer span { position: relative; }
     .footer span:not(:last-child)::after {
-      content: "";
-      position: absolute; right: -0.75rem; top: 50%;
-      transform: translateY(-50%);
-      width: 2px; height: 2px;
-      background: rgba(255,255,255,0.3);
-      border-radius: 50%;
+      content: ""; position: absolute; right: -0.75rem; top: 50%;
+      transform: translateY(-50%); width: 2px; height: 2px;
+      background: rgba(255,255,255,0.3); border-radius: 50%;
     }
 
     /* MODAL */
     .modal {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(10px);
-      z-index: 50;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(10px); z-index: 50;
       display: grid; place-items: center;
-      opacity: 0; visibility: hidden;
-      transition: all 0.4s ease;
+      opacity: 0; visibility: hidden; transition: all 0.4s ease;
     }
     .modal.show { opacity: 1; visibility: visible; }
     .modal-box {
-      background: rgba(15, 15, 17, 0.9);
-      border: 1px solid rgba(255,255,255,0.08);
-      padding: 40px;
-      width: min(90%, 450px);
+      background: rgba(15, 15, 17, 0.9); border: 1px solid rgba(255,255,255,0.08);
+      padding: 40px; width: min(90%, 450px);
       box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-      transform: scale(0.95);
-      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
     .modal.show .modal-box { transform: scale(1); }
     .email-display {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.8rem;
-      color: #fff;
-      margin-bottom: 30px;
-      text-align: center;
-      font-style: italic;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
-      padding-bottom: 10px;
+      font-family: 'Cormorant Garamond', serif; font-size: 1.8rem;
+      color: #fff; margin-bottom: 30px; text-align: center;
+      font-style: italic; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;
     }
     .modal-actions { display: flex; justify-content: center; gap: 12px; }
 
     @keyframes blink { 50% { opacity: 0; } }
 
-    /* MOBILE */
     @media (max-width: 768px) {
       .hero { padding: 0 20px; justify-content: flex-start; padding-top: 15vh; }
       .brand { font-size: 3rem; }
       .tagline { border-left: none; padding-left: 0; }
-      /* Allow footer to flow naturally on scroll */
       .footer { 
-        position: relative; /* Changed from absolute to flow with text */
-        bottom: auto; left: auto;
-        margin-top: 60px;
-        padding-bottom: 30px;
-        flex-direction: column; 
-        align-items: flex-start; 
-        gap: 0.5rem; 
+        position: relative; bottom: auto; left: auto;
+        margin-top: 60px; padding-bottom: 30px;
+        flex-direction: column; align-items: flex-start; gap: 0.5rem; 
       }
       .footer span:not(:last-child)::after { display: none; }
       .actions { flex-direction: column; width: 100%; }
       .btn { width: 100%; text-align: center; }
+      .spotlight-letter { font-size: 35vw; } /* Bigger intro letters on mobile */
     }
   </style>
 </head>
 <body>
 
   <div class="noise-overlay"></div>
-  
-  <div class="bg-wrapper" id="bgParallax"></div>
 
-  <section class="hero">
-    <div class="content">
-      <h1 class="brand">
-        <span id="type-text"></span><span class="cursor" id="cursor"></span>
-      </h1>
-      
-      <div class="fade-wrapper" id="fadeContent">
-        <p class="tagline">Minimal. Editorial. Intentional.<br>A quiet luxury brand in progress.</p>
-        <div class="actions">
-          <button class="btn btn-primary" onclick="openModal()">Contact Us</button>
-          <button class="btn" onclick="copyEmail()">Copy Email</button>
+  <div id="intro-layer">
+    <div id="spotlight-text" class="spotlight-letter"></div>
+  </div>
+  
+  <div id="main-content" class="main-site">
+    
+    <div class="bg-wrapper" id="bgParallax"></div>
+
+    <section class="hero">
+      <div class="content">
+        <h1 class="brand">
+          <span id="type-text"></span><span class="cursor" id="cursor"></span>
+        </h1>
+        
+        <div class="fade-wrapper" id="fadeContent">
+          <p class="tagline">Minimal. Editorial. Intentional.<br>A quiet luxury brand in progress.</p>
+          <div class="actions">
+            <button class="btn btn-primary" onclick="openModal()">Contact Us</button>
+            <button class="btn" onclick="copyEmail()">Copy Email</button>
+          </div>
+        </div>
+
+        <div class="footer">
+          <span>ZH</span>
+          <span>47.37° N &bull; 08.54° E</span>
+          <span>#0A0A0B</span>
+          <span>EST. 2025</span>
         </div>
       </div>
-
-      <div class="footer">
-        <span>ZH</span>
-        <span>47.37° N &bull; 08.54° E</span>
-        <span>#0A0A0B</span>
-        <span>EST. 2025</span>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 
   <div class="modal" id="emailModal">
     <div class="modal-box">
@@ -282,6 +273,48 @@
   </div>
 
   <script>
+    // --- UTILS ---
+    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    
+    // --- 1. INTRO SEQUENCE ---
+    const brandName = "VESLORA";
+    const spotlightDiv = document.getElementById('spotlight-text');
+    const introLayer = document.getElementById('intro-layer');
+    const mainContent = document.getElementById('main-content');
+
+    async function playIntro() {
+        const chars = brandName.split('');
+        const timePerLetter = 800; // Slightly faster for energy
+        
+        // Loop through V-E-S-L-O-R-A
+        for (let i = 0; i < chars.length; i++) {
+            spotlightDiv.innerText = chars[i];
+            
+            // Trigger Animation
+            spotlightDiv.classList.remove('flash-animate');
+            void spotlightDiv.offsetWidth; // Reflow hack
+            spotlightDiv.classList.add('flash-animate');
+            
+            await wait(timePerLetter);
+        }
+
+        // End Intro -> Transition to Main
+        spotlightDiv.style.display = 'none';
+        introLayer.style.opacity = '0'; // Fade out black layer
+        
+        await wait(1000); // Wait for fade to finish
+        introLayer.style.display = 'none'; // Remove from DOM
+        
+        // Reveal Main Site
+        mainContent.style.opacity = '1';
+        document.body.style.overflowX = 'hidden'; 
+        document.body.style.overflowY = 'auto'; // Re-enable scrolling
+
+        // Start Typewriter
+        startMainAnimation();
+    }
+
+    // --- 2. MAIN SITE ANIMATION ---
     const textElement = document.getElementById('type-text');
     const cursor = document.getElementById('cursor');
     const fadeContent = document.getElementById('fadeContent');
@@ -297,9 +330,8 @@
     let currentText = "";
     const typeSpeed = () => 45 + Math.random() * 25; 
     const deleteSpeed = () => 25 + Math.random() * 20;
-    const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    async function typeWriter() {
+    async function startMainAnimation() {
       await wait(500);
       for (const step of sequence) {
         if (step.delete) {
@@ -323,8 +355,11 @@
       }
       cursor.classList.add('stopped');
     }
-    typeWriter();
 
+    // Start everything on load
+    window.onload = () => setTimeout(playIntro, 500);
+
+    // --- 3. PARALLAX & MODAL ---
     const bg = document.getElementById('bgParallax');
     document.addEventListener('mousemove', (e) => {
       const x = (window.innerWidth - e.pageX * 2) / 100;
