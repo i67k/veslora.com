@@ -8,7 +8,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,600&display=swap" rel="stylesheet">
 
   <style>
-    /* --- GRUNDEINSTELLUNGEN --- */
+    /* --- BASE SETTINGS --- */
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
     html, body { height:100%; }
 
@@ -25,7 +25,7 @@
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     }
 
-    /* --- INTRO (Der Aufbau) --- */
+    /* --- INTRO LAYER --- */
     #intro-layer {
         position: fixed; inset: 0;
         background-color: #000;
@@ -33,12 +33,12 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        transition: opacity 1.0s ease;
+        /* CHANGED: Faster fade out (0.5s) */
+        transition: opacity 0.5s ease;
     }
 
     .spotlight-text {
         font-family: 'Cormorant Garamond', serif;
-        /* Schrift kleiner gemacht, damit das ganze Wort Platz hat */
         font-size: 13vw; 
         font-weight: 600;
         font-style: italic;
@@ -46,12 +46,11 @@
         background: linear-gradient(180deg, #fff 20%, #444 100%);
         -webkit-background-clip: text;
         background-clip: text;
-        opacity: 1; /* Muss sichtbar bleiben */
+        opacity: 1; 
         text-align: center;
         white-space: nowrap;
     }
 
-    /* Leichter Impuls bei jedem neuen Buchstaben */
     .pulse-animate {
         animation: pulseSequence 0.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
     }
@@ -61,7 +60,7 @@
         100% { transform: scale(1);    filter: blur(0px); opacity: 1; }
     }
 
-    /* --- HAUPTSEITE --- */
+    /* --- MAIN SITE --- */
     .main-site {
         opacity: 0; 
         transition: opacity 1.5s ease;
@@ -70,14 +69,12 @@
         height: 100%;
     }
     
-    /* HINTERGRUND BILD WIEDER EINGEFÜGT */
     .bg-wrapper {
       position: fixed; inset: -50px; z-index: 1;
-      /* Bild mit dunklem Overlay + Fallback Farbe */
       background: 
         linear-gradient(to right, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.45) 100%),
         url("assets/hero.jpg") center/cover no-repeat;
-      background-color: #0f0f10; /* Falls Bild fehlt, bleibt es dunkel */
+      background-color: #0f0f10; 
       transition: transform 0.1s linear;
     }
 
@@ -150,7 +147,6 @@
     .btn-primary { background: #e8e8e8; color: #0a0a0b; border-color: #e8e8e8; font-weight: 500; }
     .btn-primary:hover { background: #fff; box-shadow: 0 0 20px rgba(255,255,255,0.25); }
 
-    /* Footer bereinigt */
     .footer {
       position: absolute; bottom: 30px; left: 8vw; z-index: 3;
       font-family: 'Inter', sans-serif; font-size: 0.7rem;
@@ -192,7 +188,7 @@
       }
       .actions { flex-direction: column; width: 100%; }
       .btn { width: 100%; text-align: center; }
-      .spotlight-text { font-size: 18vw; } /* Mobile Schriftgröße angepasst */
+      .spotlight-text { font-size: 18vw; } 
     }
   </style>
 </head>
@@ -222,7 +218,7 @@
         </div>
 
         <div class="footer">
-          <span>EST. 2025</span>
+          <span>&copy; 2025</span>
         </div>
       </div>
     </section>
@@ -242,23 +238,19 @@
   <script>
     const wait = (ms) => new Promise(resolve => setTimeout(resolve, ms));
     
-    // --- 1. INTRO LOGIK (Aufbauend) ---
+    // --- 1. INTRO LOGIK ---
     const brandName = "VESLORA";
     const spotlightDiv = document.getElementById('spotlight-text');
     const introLayer = document.getElementById('intro-layer');
     const mainContent = document.getElementById('main-content');
 
     async function playIntro() {
-        // Zeit pro Buchstabe (etwas schneller: 250ms)
         const timePerStep = 250; 
         
-        // Loop baut das Wort auf: V -> VE -> VES ...
         for (let i = 1; i <= brandName.length; i++) {
-            // Schneidet String aus (z.B. "VES")
             const partialText = brandName.substring(0, i);
             spotlightDiv.innerText = partialText;
             
-            // Kleiner Pulse-Effekt bei jedem Schritt
             spotlightDiv.classList.remove('pulse-animate');
             void spotlightDiv.offsetWidth; 
             spotlightDiv.classList.add('pulse-animate');
@@ -266,25 +258,22 @@
             await wait(timePerStep);
         }
 
-        // Kurz warten, damit man das volle Wort sieht
-        await wait(600);
+        await wait(600); // Wait briefly to see full word
 
-        // Intro ausblenden
+        // FADE OUT FAST
         introLayer.style.opacity = '0'; 
         
-        await wait(1000); 
+        await wait(500); // Matches the new 0.5s CSS transition
         introLayer.style.display = 'none'; 
         
-        // Hauptseite einblenden
         mainContent.style.opacity = '1';
         document.body.style.overflowX = 'hidden'; 
         document.body.style.overflowY = 'auto'; 
 
-        // Hauptanimation starten
         startMainAnimation();
     }
 
-    // --- 2. HAUPTANIMATION ---
+    // --- 2. MAIN ANIMATION ---
     const textElement = document.getElementById('type-text');
     const cursor = document.getElementById('cursor');
     const fadeContent = document.getElementById('fadeContent');
@@ -326,10 +315,8 @@
       cursor.classList.add('stopped');
     }
 
-    // Start
     setTimeout(playIntro, 100);
 
-    // --- 3. EXTRAS ---
     const bg = document.getElementById('bgParallax');
     document.addEventListener('mousemove', (e) => {
       const x = (window.innerWidth - e.pageX * 2) / 100;
