@@ -421,8 +421,7 @@ body.subpage {
 .subpage-content strong {
   font-family: 'Cormorant Garamond', serif;
   color: #fff;
-  font-weight: 600;
-  font-style: italic;
+  font-weight: 500;
   letter-spacing: 0.02em;
   text-transform: none;
   font-size: 1.8rem;
@@ -442,7 +441,6 @@ body.subpage {
 .subpage-value {
   font-family: 'Cormorant Garamond', serif;
   font-size: 1.5rem;
-  font-style: italic;
   color: rgba(255,255,255,0.85);
   margin-bottom: 35px !important;
 }
@@ -464,18 +462,22 @@ body.subpage {
    ======================================== */
 @media (max-width: 768px) {
   body {
-    overflow: hidden;
+    overflow: auto;
   }
 
   .hero {
-    height: 100dvh;
+    min-height: 100dvh;
+    height: auto;
     padding: 0 24px;
-    justify-content: flex-end;
-    padding-bottom: 100px;
+    justify-content: center;
+    padding-top: 60px;
+    padding-bottom: 0;
   }
 
   .content {
     gap: 1.2rem;
+    margin-top: auto;
+    margin-bottom: 60px;
   }
 
   .brand {
@@ -503,11 +505,16 @@ body.subpage {
   }
 
   .footer {
-    left: 0;
-    right: 0;
-    bottom: 24px;
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    margin-top: auto;
+    margin-bottom: 30px;
     justify-content: center;
-    gap: 1.8rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    width: 100%;
   }
 
   .spotlight-text {

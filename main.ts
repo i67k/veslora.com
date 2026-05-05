@@ -14,16 +14,13 @@ const fadeContent = document.getElementById('fadeContent');
 async function playIntro() {
   if (!spotlightDiv || !introLayer || !mainContent) return;
 
-  const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
-  const isReload = navEntries.length > 0 && navEntries[0].type === "reload";
-
-  if (isReload) {
-    sessionStorage.removeItem('veslora_intro_played');
-  }
-
-  const hasSeenIntro = sessionStorage.getItem('veslora_intro_played');
+  const urlParams = new URLSearchParams(window.location.search);
+  const skipIntro = urlParams.has('skipIntro');
   
-  if (hasSeenIntro) {
+  if (skipIntro) {
+    // Clean up the URL so it looks nice
+    window.history.replaceState({}, document.title, window.location.pathname);
+
     // Skip intro layer
     introLayer.style.display = 'none';
     mainContent.classList.add('no-intro');
@@ -57,9 +54,6 @@ async function playIntro() {
 
   mainContent.style.opacity = '1';
   
-  // Set session storage so intro doesn't play again
-  sessionStorage.setItem('veslora_intro_played', 'true');
-
   startMainAnimation();
 }
 
@@ -120,8 +114,21 @@ const emailEl = document.getElementById('emailText');
 
 const globalWindow = window as any;
 
-globalWindow.openModal = function openModal() { modal?.classList.add('show'); }
-globalWindow.closeModal = function closeModal() { modal?.classList.remove('show'); }
+globalWindow.openModal = function openModal() { 
+  if (modal) {
+    modal.style.display = 'grid';
+    // Small delay to allow CSS to register the display change before animating opacity
+    setTimeout(() => modal.classList.add('show'), 10);
+  }
+}
+
+globalWindow.closeModal = function closeModal() { 
+  if (modal) {
+    modal.classList.remove('show');
+    // Wait for the opacity transition (0.5s) to finish before hiding display
+    setTimeout(() => modal.style.display = 'none', 500);
+  }
+}
 
 globalWindow.openMail = function openMail() { 
   if (emailEl) window.location.href = "mailto:" + emailEl.textContent?.trim(); 
