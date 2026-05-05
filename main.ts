@@ -112,28 +112,25 @@ if (bg) {
 const modal = document.getElementById('emailModal');
 const emailEl = document.getElementById('emailText');
 
-const globalWindow = window as any;
-
-globalWindow.openModal = function openModal() { 
+function openModal() { 
   if (modal) {
     modal.style.display = 'grid';
-    // Small delay to allow CSS to register the display change before animating opacity
     setTimeout(() => modal.classList.add('show'), 10);
   }
 }
 
-globalWindow.closeModal = function closeModal() { 
+function closeModal() { 
   if (modal) {
     modal.classList.remove('show');
-    // Wait for the opacity transition (0.5s) to finish before hiding display
     setTimeout(() => modal.style.display = 'none', 500);
   }
 }
 
-globalWindow.openMail = function openMail() { 
+function openMail() { 
   if (emailEl) window.location.href = "mailto:" + emailEl.textContent?.trim(); 
 }
-globalWindow.copyEmail = async function copyEmail() { 
+
+async function copyEmail() { 
   try { 
     if (emailEl) await navigator.clipboard.writeText(emailEl.textContent?.trim() || ""); 
   } catch (e) { 
@@ -141,12 +138,18 @@ globalWindow.copyEmail = async function copyEmail() {
   } 
 }
 
+document.getElementById('btn-contact-hero')?.addEventListener('click', openModal);
+document.getElementById('btn-copy-hero')?.addEventListener('click', copyEmail);
+document.getElementById('btn-open-mail-modal')?.addEventListener('click', openMail);
+document.getElementById('btn-copy-modal')?.addEventListener('click', copyEmail);
+document.getElementById('btn-close-modal')?.addEventListener('click', closeModal);
+
 if (modal) {
-  modal.addEventListener('click', (e) => { if (e.target === modal) globalWindow.closeModal(); });
+  modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
 }
 
 document.addEventListener('keydown', (e) => { 
   if (e.key === 'Escape') {
-    globalWindow.closeModal(); 
+    closeModal(); 
   }
 });
