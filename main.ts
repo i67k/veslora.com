@@ -4,12 +4,38 @@ const wait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // --- 1. INTRO LOGIC ---
 const brandName = "VESLORA";
-const spotlightDiv = document.getElementById('spotlight-text') as HTMLElement;
-const introLayer = document.getElementById('intro-layer') as HTMLElement;
-const mainContent = document.getElementById('main-content') as HTMLElement;
+const spotlightDiv = document.getElementById('spotlight-text');
+const introLayer = document.getElementById('intro-layer');
+const mainContent = document.getElementById('main-content');
+const textElement = document.getElementById('type-text');
+const cursor = document.getElementById('cursor');
+const fadeContent = document.getElementById('fadeContent');
 
 async function playIntro() {
-  const timePerStep = 250;
+  if (!spotlightDiv || !introLayer || !mainContent) return;
+
+  const navEntries = performance.getEntriesByType("navigation") as PerformanceNavigationTiming[];
+  const isReload = navEntries.length > 0 && navEntries[0].type === "reload";
+
+  if (isReload) {
+    sessionStorage.removeItem('veslora_intro_played');
+  }
+
+  const hasSeenIntro = sessionStorage.getItem('veslora_intro_played');
+  
+  if (hasSeenIntro) {
+    // Skip intro layer
+    introLayer.style.display = 'none';
+    mainContent.classList.add('no-intro');
+    
+    // Skip typing animation completely, set final state
+    if (textElement) textElement.textContent = "Veslora.";
+    if (fadeContent) fadeContent.classList.add('visible');
+    if (cursor) cursor.classList.add('stopped');
+    return;
+  }
+
+  const timePerStep = 100; // Speed up letter appearance
 
   for (let i = 1; i <= brandName.length; i++) {
     const partialText = brandName.substring(0, i);
@@ -22,25 +48,22 @@ async function playIntro() {
     await wait(timePerStep);
   }
 
-  await wait(300);
+  await wait(150); // Speed up pause before fade
 
   introLayer.style.opacity = '0';
 
-  await wait(300);
+  await wait(200); // Speed up removal
   introLayer.style.display = 'none';
 
   mainContent.style.opacity = '1';
-  document.body.style.overflowX = 'hidden';
-  document.body.style.overflowY = 'auto';
+  
+  // Set session storage so intro doesn't play again
+  sessionStorage.setItem('veslora_intro_played', 'true');
 
   startMainAnimation();
 }
 
 // --- 2. MAIN ANIMATION ---
-const textElement = document.getElementById('type-text') as HTMLElement;
-const cursor = document.getElementById('cursor') as HTMLElement;
-const fadeContent = document.getElementById('fadeContent') as HTMLElement;
-
 const sequence = [
   { text: "Veslora", delay: 1500, triggerFade: true },
   { delete: true, delay: 400 },
@@ -54,6 +77,7 @@ const typeSpeed = () => 45 + Math.random() * 25;
 const deleteSpeed = () => 25 + Math.random() * 20;
 
 async function startMainAnimation() {
+  if (!textElement || !cursor || !fadeContent) return;
   await wait(500);
   for (const step of sequence) {
     if (step.delete) {
@@ -78,46 +102,44 @@ async function startMainAnimation() {
   cursor.classList.add('stopped');
 }
 
-setTimeout(playIntro, 100);
+if (spotlightDiv) {
+  setTimeout(playIntro, 100);
+}
 
-const bg = document.getElementById('bgParallax') as HTMLElement;
-document.addEventListener('mousemove', (e) => {
-  const x = (window.innerWidth - e.pageX * 2) / 100;
-  const y = (window.innerHeight - e.pageY * 2) / 100;
-  bg.style.transform = `translate(${x}px, ${y}px)`;
-});
+const bg = document.getElementById('bgParallax');
+if (bg) {
+  document.addEventListener('mousemove', (e) => {
+    const x = (window.innerWidth - e.pageX * 2) / 100;
+    const y = (window.innerHeight - e.pageY * 2) / 100;
+    bg.style.transform = `translate(${x}px, ${y}px)`;
+  });
+}
 
-const modal = document.getElementById('emailModal') as HTMLElement;
-const imprintModal = document.getElementById('imprintModal') as HTMLElement;
-const privacyModal = document.getElementById('privacyModal') as HTMLElement;
-const emailEl = document.getElementById('emailText') as HTMLElement;
+const modal = document.getElementById('emailModal');
+const emailEl = document.getElementById('emailText');
 
 const globalWindow = window as any;
 
-globalWindow.openModal = function openModal() { modal.classList.add('show'); }
-globalWindow.closeModal = function closeModal() { modal.classList.remove('show'); }
-globalWindow.openImprint = function openImprint() { imprintModal.classList.add('show'); }
-globalWindow.closeImprint = function closeImprint() { imprintModal.classList.remove('show'); }
-globalWindow.openPrivacy = function openPrivacy() { privacyModal.classList.add('show'); }
-globalWindow.closePrivacy = function closePrivacy() { privacyModal.classList.remove('show'); }
+globalWindow.openModal = function openModal() { modal?.classList.add('show'); }
+globalWindow.closeModal = function closeModal() { modal?.classList.remove('show'); }
 
-globalWindow.openMail = function openMail() { window.location.href = "mailto:" + emailEl.textContent?.trim(); }
+globalWindow.openMail = function openMail() { 
+  if (emailEl) window.location.href = "mailto:" + emailEl.textContent?.trim(); 
+}
 globalWindow.copyEmail = async function copyEmail() { 
   try { 
-    await navigator.clipboard.writeText(emailEl.textContent?.trim() || ""); 
+    if (emailEl) await navigator.clipboard.writeText(emailEl.textContent?.trim() || ""); 
   } catch (e) { 
     console.error("Clipboard error", e);
   } 
 }
 
-modal.addEventListener('click', (e) => { if (e.target === modal) globalWindow.closeModal(); });
-imprintModal.addEventListener('click', (e) => { if (e.target === imprintModal) globalWindow.closeImprint(); });
-privacyModal.addEventListener('click', (e) => { if (e.target === privacyModal) globalWindow.closePrivacy(); });
+if (modal) {
+  modal.addEventListener('click', (e) => { if (e.target === modal) globalWindow.closeModal(); });
+}
 
 document.addEventListener('keydown', (e) => { 
   if (e.key === 'Escape') {
     globalWindow.closeModal(); 
-    globalWindow.closeImprint();
-    globalWindow.closePrivacy();
   }
 });

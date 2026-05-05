@@ -57,44 +57,19 @@
 
       <div class="footer">
         <span>&copy; 2026 Veslora</span>
-        <button class="footer-link" onclick="openImprint()">Imprint</button>
-        <button class="footer-link" onclick="openPrivacy()">Privacy</button>
+        <a href="/imprint.html" class="footer-link" style="text-decoration: none;">Imprint</a>
+        <a href="/privacy.html" class="footer-link" style="text-decoration: none;">Privacy</a>
       </div>
     </section>
   </div>
 
-  <div class="modal" id="emailModal">
+  <div class="modal" id="emailModal" style="opacity: 0; visibility: hidden;">
     <div class="modal-box">
       <div class="email-display" id="emailText">info@veslora.com</div>
       <div class="modal-actions">
         <button class="btn btn-primary" onclick="openMail()">Open Mail</button>
         <button class="btn" onclick="copyEmail()">Copy</button>
         <button class="btn" onclick="closeModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="imprintModal">
-    <div class="modal-box text-modal">
-      <h2>Imprint</h2>
-      <p><strong>VESLORA</strong></p>
-      <p>Registered Swiss Trademark (IGE/Swissreg)<br>
-      Registration No: 842167<br>
-      Classes: 3, 4, 35</p>
-      <p>Contact: info@veslora.com</p>
-      <div class="modal-actions">
-        <button class="btn" onclick="closeImprint()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal" id="privacyModal">
-    <div class="modal-box text-modal">
-      <h2>Privacy Policy</h2>
-      <p>This website is hosted on GitHub Pages, which may temporarily collect your IP address to serve these files. We use Google Fonts to display text, which also briefly processes your IP address.</p>
-      <p>If you contact us via email, we will use your email address solely to respond to your inquiry and will not share it with third parties.</p>
-      <div class="modal-actions">
-        <button class="btn" onclick="closePrivacy()">Close</button>
       </div>
     </div>
   </div>
