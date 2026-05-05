@@ -4,7 +4,7 @@
   "description": "Veslora Static Site",
   "scripts": {
     "dev": "vite",
-    "build": "npx vite build",
+    "build": "npx -y vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
