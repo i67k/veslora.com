@@ -1,0 +1,321 @@
+/* --- BASE SETTINGS --- */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: #000;
+  color: #e8e8e8;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  /* Prevents scrollbars globally */
+}
+
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* --- INTRO LAYER --- */
+#intro-layer {
+  position: fixed;
+  inset: 0;
+  background-color: #000;
+  z-index: 500;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.3s ease;
+  /* Fast fade out */
+}
+
+.spotlight-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13vw;
+  font-weight: 600;
+  font-style: italic;
+  color: transparent;
+  background: linear-gradient(180deg, #fff 20%, #444 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  opacity: 1;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.pulse-animate {
+  animation: pulseSequence 0.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes pulseSequence {
+  0% {
+    transform: scale(1.05);
+    filter: blur(4px);
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: scale(1);
+    filter: blur(0px);
+    opacity: 1;
+  }
+}
+
+/* --- MAIN SITE --- */
+.main-site {
+  opacity: 0;
+  transition: opacity 1.5s ease;
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.bg-wrapper {
+  position: fixed;
+  inset: -50px;
+  z-index: 1;
+  background:
+    linear-gradient(to right, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.45) 100%),
+    url("/assets/hero.webp") center/cover no-repeat;
+  background-color: #0f0f10;
+  transition: transform 0.1s linear;
+}
+
+.hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding: 0 8vw;
+  z-index: 3;
+}
+
+.content {
+  position: relative;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  /* Removes the min-height hack, relies on locked element heights */
+  margin: 40px 0;
+}
+
+.brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 600;
+  font-style: italic;
+  /* Slightly smaller min-size to help mobile fitting */
+  font-size: clamp(2.2rem, 8vw, 6.5rem);
+  line-height: 1.1;
+  color: #fff;
+
+  /* FIX FOR JUMPING BUTTONS: */
+  white-space: nowrap;
+  /* Forces one line always */
+  height: 1.2em;
+  /* Locks vertical height */
+  display: block;
+  /* Ensures height takes effect */
+  overflow: visible;
+  /* Allows text to bleed out if too long */
+}
+
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: 0.8em;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-left: 8px;
+  animation: blink 1s step-end infinite;
+  vertical-align: middle;
+  transform: translateY(-8%);
+}
+
+.cursor.stopped {
+  animation: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.fade-wrapper {
+  opacity: 0;
+  transform: translateY(15px);
+  transition: opacity 1.2s ease, transform 1.2s ease;
+}
+
+.fade-wrapper.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.tagline {
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  font-weight: 300;
+  line-height: 1.6;
+  color: rgba(232, 232, 232, 0.8);
+  max-width: 420px;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+  padding-left: 20px;
+  margin-bottom: 24px;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+}
+
+.btn {
+  appearance: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.03);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  backdrop-filter: blur(4px);
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-primary {
+  background: #e8e8e8;
+  color: #0a0a0b;
+  border-color: #e8e8e8;
+  font-weight: 500;
+}
+
+.btn-primary:hover {
+  background: #fff;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+}
+
+/* Footer: Absolutely positioned at bottom */
+.footer {
+  position: absolute;
+  bottom: 25px;
+  left: 8vw;
+  z-index: 3;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.35);
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  z-index: 900;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s ease;
+}
+
+.modal.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-box {
+  background: rgba(20, 20, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  width: min(90%, 450px);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  transform: scale(0.95);
+  transition: transform 0.4s ease;
+}
+
+.modal.show .modal-box {
+  transform: scale(1);
+}
+
+.email-display {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 30px;
+  text-align: center;
+  font-style: italic;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 0 20px;
+    justify-content: flex-start;
+    padding-top: 15vh;
+  }
+
+  .brand {
+    font-size: 2.8rem;
+  }
+
+  /* Explicit mobile size */
+  .tagline {
+    border-left: none;
+    padding-left: 0;
+  }
+
+  .footer {
+    left: 0;
+    width: 100%;
+    justify-content: center;
+    bottom: 25px;
+  }
+
+  .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .spotlight-text {
+    font-size: 18vw;
+  }
+}
