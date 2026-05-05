@@ -88,12 +88,19 @@ document.addEventListener('mousemove', (e) => {
 });
 
 const modal = document.getElementById('emailModal') as HTMLElement;
+const imprintModal = document.getElementById('imprintModal') as HTMLElement;
+const privacyModal = document.getElementById('privacyModal') as HTMLElement;
 const emailEl = document.getElementById('emailText') as HTMLElement;
 
 const globalWindow = window as any;
 
 globalWindow.openModal = function openModal() { modal.classList.add('show'); }
 globalWindow.closeModal = function closeModal() { modal.classList.remove('show'); }
+globalWindow.openImprint = function openImprint() { imprintModal.classList.add('show'); }
+globalWindow.closeImprint = function closeImprint() { imprintModal.classList.remove('show'); }
+globalWindow.openPrivacy = function openPrivacy() { privacyModal.classList.add('show'); }
+globalWindow.closePrivacy = function closePrivacy() { privacyModal.classList.remove('show'); }
+
 globalWindow.openMail = function openMail() { window.location.href = "mailto:" + emailEl.textContent?.trim(); }
 globalWindow.copyEmail = async function copyEmail() { 
   try { 
@@ -104,4 +111,13 @@ globalWindow.copyEmail = async function copyEmail() {
 }
 
 modal.addEventListener('click', (e) => { if (e.target === modal) globalWindow.closeModal(); });
-document.addEventListener('keydown', (e) => { if (e.key === 'Escape') globalWindow.closeModal(); });
+imprintModal.addEventListener('click', (e) => { if (e.target === imprintModal) globalWindow.closeImprint(); });
+privacyModal.addEventListener('click', (e) => { if (e.target === privacyModal) globalWindow.closePrivacy(); });
+
+document.addEventListener('keydown', (e) => { 
+  if (e.key === 'Escape') {
+    globalWindow.closeModal(); 
+    globalWindow.closeImprint();
+    globalWindow.closePrivacy();
+  }
+});

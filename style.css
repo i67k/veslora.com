@@ -226,6 +226,22 @@ body {
   align-items: center;
 }
 
+.footer-link {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.35);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
 .modal {
   position: fixed;
   inset: 0;
@@ -267,6 +283,29 @@ body {
   font-style: italic;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 10px;
+}
+
+.text-modal h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  color: #fff;
+  margin-bottom: 20px;
+  font-style: italic;
+  font-weight: 400;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 10px;
+}
+
+.text-modal p {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: rgba(232, 232, 232, 0.8);
+  margin-bottom: 15px;
+}
+
+.text-modal p:last-of-type {
+  margin-bottom: 30px;
 }
 
 .modal-actions {
