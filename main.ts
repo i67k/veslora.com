@@ -139,7 +139,6 @@ async function copyEmail() {
 }
 
 document.getElementById('btn-contact-hero')?.addEventListener('click', openModal);
-document.getElementById('btn-copy-hero')?.addEventListener('click', copyEmail);
 document.getElementById('btn-open-mail-modal')?.addEventListener('click', openMail);
 document.getElementById('btn-copy-modal')?.addEventListener('click', copyEmail);
 document.getElementById('btn-close-modal')?.addEventListener('click', closeModal);
@@ -153,3 +152,4 @@ document.addEventListener('keydown', (e) => {
     closeModal(); 
   }
 });
+
