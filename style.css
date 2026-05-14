@@ -638,11 +638,21 @@ body.subpage {
     margin-bottom: 40px;
   }
 
+  /* Mobile footer: hide About + The Work — too many items for one line.
+     Imprint · Privacy + copyright fits cleanly, same as homepage. */
   .subpage-footer {
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
+    justify-content: center;
+    gap: 1.8rem;
+    left: 16px;
+    right: 16px;
   }
+
+  .subpage-footer a[href="/about.html"],
+  .subpage-footer a[href="/work.html"] {
+    display: none;
+  }
+
+
 
 }
 
