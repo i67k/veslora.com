@@ -14,23 +14,34 @@ const fadeContent = document.getElementById('fadeContent');
 async function playIntro() {
   if (!spotlightDiv || !introLayer || !mainContent) return;
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const skipIntro = urlParams.has('skipIntro');
-  
-  if (skipIntro) {
-    // Clean up the URL so it looks nice
-    window.history.replaceState({}, document.title, window.location.pathname);
+  // Detect reload vs. navigation — play intro on reload, skip on back/forward
+  const navEntry = performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming;
+  const isReload = navEntry?.type === 'reload';
+  if (isReload) sessionStorage.removeItem('veslora_intro_played');
 
+  const alreadyPlayed = sessionStorage.getItem('veslora_intro_played');
+  const urlParams = new URLSearchParams(window.location.search);
+  const skipIntro = alreadyPlayed === '1' || urlParams.has('skipIntro');
+
+  if (!alreadyPlayed) {
+    sessionStorage.setItem('veslora_intro_played', '1');
+  }
+
+  if (skipIntro) {
+    // Clean up URL if needed
+    if (urlParams.has('skipIntro')) {
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
     // Skip intro layer
     introLayer.style.display = 'none';
     mainContent.classList.add('no-intro');
-    
-    // Skip typing animation completely, set final state
-    if (textElement) textElement.textContent = "Veslora.";
+    // Set final state directly
+    if (textElement) textElement.textContent = 'Veslora.';
     if (fadeContent) fadeContent.classList.add('visible');
     if (cursor) cursor.classList.add('stopped');
     return;
   }
+
 
   const timePerStep = 100; // Speed up letter appearance
 
