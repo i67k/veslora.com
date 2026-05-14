@@ -5,6 +5,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: 'index.html',
+        about: 'about.html',
+        work: 'work.html',
         imprint: 'imprint.html',
         privacy: 'privacy.html'
       }
