@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /work.html
+
+Sitemap: https://veslora.com/sitemap.xml
