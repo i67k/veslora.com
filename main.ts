@@ -164,3 +164,75 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
+// --- 3. PREMIUM UI/UX ENHANCEMENTS ---
+
+function initPageTransitions() {
+  const overlay = document.createElement('div');
+  overlay.className = 'page-transition-overlay';
+  document.body.appendChild(overlay);
+
+  // Fade out on page entry
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      overlay.classList.add('fade-out');
+    });
+  });
+
+  // Handle browser back cache
+  window.addEventListener('pageshow', (event) => {
+    if (event.persisted) {
+      overlay.classList.add('fade-out');
+    }
+  });
+
+  // Intercept relative internal link clicks
+  document.body.addEventListener('click', (e) => {
+    const target = e.target as HTMLElement;
+    const anchor = target.closest('a');
+
+    if (anchor) {
+      const href = anchor.getAttribute('href');
+      
+      if (
+        href && 
+        !href.startsWith('mailto:') && 
+        !href.startsWith('tel:') && 
+        !href.startsWith('#') && 
+        !anchor.getAttribute('target') &&
+        anchor.hostname === window.location.hostname
+      ) {
+        e.preventDefault();
+        overlay.classList.remove('fade-out');
+
+        setTimeout(() => {
+          window.location.href = href;
+        }, 500);
+      }
+    }
+  });
+}
+
+function initScrollReveals() {
+  const observerOptions = {
+    threshold: 0.05,
+    rootMargin: '0px 0px -40px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  const revealElements = document.querySelectorAll('.reveal');
+  revealElements.forEach(el => observer.observe(el));
+}
+
+// Instantiate features
+initPageTransitions();
+initScrollReveals();
+
+
