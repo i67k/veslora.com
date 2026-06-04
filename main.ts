@@ -206,7 +206,7 @@ function initPageTransitions() {
 
         setTimeout(() => {
           window.location.href = href;
-        }, 500);
+        }, 300);
       }
     }
   });
